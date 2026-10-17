@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { api } from "./services/api";
 import { config } from "./config";
 import type { Disruption, Explanation, Recommendation, Shipment } from "./types";
@@ -16,6 +16,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 
 function MainContent() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [useMocks, setUseMocks] = useState(config.useMocks);
 
   // Remote / Mock Data States
@@ -122,102 +123,104 @@ function MainContent() {
           <div className="gg-mock-banner-content">
             <span className="gg-banner-pill">STANDALONE BENCHMARK MODE</span>
             <span>
-              Operating with the verified IBM Z Datathon 2026 Frozen Dataset (v2.1.1). Set <code>VITE_USE_MOCKS=false</code> in <code>.env</code> or toggle above to connect live backend microservices.
+              Operating with the verified Global Logistics Benchmark Dataset (v2.1.1). Set <code>VITE_USE_MOCKS=false</code> in <code>.env</code> or toggle above to connect live backend microservices.
             </span>
           </div>
         </div>
       )}
 
       <main className="gg-main-layout" id="main-content">
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route
-            path="/dashboard"
-            element={
-              <>
-                <StatOverview
-                  totalShipments={shipments?.length ?? 27}
-                  totalDisruptions={disruptions?.length ?? 5}
-                  selectedShipment={currentShipment}
-                  selectedDisruption={currentDisruption}
-                />
-                <DashboardPage
-                  shipments={shipments}
-                  disruptions={disruptions}
-                  loadingInitial={loadingInitial}
-                  initialError={initialError}
-                  selectedShipmentId={selectedShipmentId}
-                  selectedDisruptionId={selectedDisruptionId}
-                  setSelectedShipmentId={(id) => {
-                    setSelectedShipmentId(id);
-                    setRecommendation(null);
-                    setExplanation(null);
-                  }}
-                  setSelectedDisruptionId={(id) => {
-                    setSelectedDisruptionId(id);
-                    setRecommendation(null);
-                    setExplanation(null);
-                  }}
-                  isAnalysing={isAnalysing}
-                  analysisError={analysisError}
-                  recommendation={recommendation}
-                  isExplaining={isExplaining}
-                  explanationError={explanationError}
-                  explanation={explanation}
-                  handleAnalyse={handleAnalyse}
-                  loadInitialData={loadInitialData}
-                  onRetryExplain={() => {
-                    if (recommendation) {
-                      setIsExplaining(true);
-                      api.explain(recommendation)
-                        .then(setExplanation)
-                        .catch((e: Error) => setExplanationError(e.message))
-                        .finally(() => setIsExplaining(false));
-                    }
-                  }}
-                />
-              </>
-            }
-          />
-          <Route
-            path="/scenarios"
-            element={
-              <>
-                <StatOverview
-                  totalShipments={shipments?.length ?? 27}
-                  totalDisruptions={disruptions?.length ?? 5}
-                  selectedShipment={currentShipment}
-                  selectedDisruption={currentDisruption}
-                />
-                <ScenariosView onLoadScenario={handleLoadScenario} />
-              </>
-            }
-          />
-          <Route
-            path="/dataset"
-            element={
-              <>
-                <StatOverview
-                  totalShipments={shipments?.length ?? 27}
-                  totalDisruptions={disruptions?.length ?? 5}
-                  selectedShipment={currentShipment}
-                  selectedDisruption={currentDisruption}
-                />
-                <DatasetExplorerView />
-              </>
-            }
-          />
-          <Route path="/analytics" element={<AnalyticsPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="*" element={<LandingPage />} />
-        </Routes>
+        <div key={location.pathname} className="gg-genie-transition">
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route
+              path="/dashboard"
+              element={
+                <>
+                  <StatOverview
+                    totalShipments={shipments?.length ?? 27}
+                    totalDisruptions={disruptions?.length ?? 5}
+                    selectedShipment={currentShipment}
+                    selectedDisruption={currentDisruption}
+                  />
+                  <DashboardPage
+                    shipments={shipments}
+                    disruptions={disruptions}
+                    loadingInitial={loadingInitial}
+                    initialError={initialError}
+                    selectedShipmentId={selectedShipmentId}
+                    selectedDisruptionId={selectedDisruptionId}
+                    setSelectedShipmentId={(id) => {
+                      setSelectedShipmentId(id);
+                      setRecommendation(null);
+                      setExplanation(null);
+                    }}
+                    setSelectedDisruptionId={(id) => {
+                      setSelectedDisruptionId(id);
+                      setRecommendation(null);
+                      setExplanation(null);
+                    }}
+                    isAnalysing={isAnalysing}
+                    analysisError={analysisError}
+                    recommendation={recommendation}
+                    isExplaining={isExplaining}
+                    explanationError={explanationError}
+                    explanation={explanation}
+                    handleAnalyse={handleAnalyse}
+                    loadInitialData={loadInitialData}
+                    onRetryExplain={() => {
+                      if (recommendation) {
+                        setIsExplaining(true);
+                        api.explain(recommendation)
+                          .then(setExplanation)
+                          .catch((e: Error) => setExplanationError(e.message))
+                          .finally(() => setIsExplaining(false));
+                      }
+                    }}
+                  />
+                </>
+              }
+            />
+            <Route
+              path="/scenarios"
+              element={
+                <>
+                  <StatOverview
+                    totalShipments={shipments?.length ?? 27}
+                    totalDisruptions={disruptions?.length ?? 5}
+                    selectedShipment={currentShipment}
+                    selectedDisruption={currentDisruption}
+                  />
+                  <ScenariosView onLoadScenario={handleLoadScenario} />
+                </>
+              }
+            />
+            <Route
+              path="/dataset"
+              element={
+                <>
+                  <StatOverview
+                    totalShipments={shipments?.length ?? 27}
+                    totalDisruptions={disruptions?.length ?? 5}
+                    selectedShipment={currentShipment}
+                    selectedDisruption={currentDisruption}
+                  />
+                  <DatasetExplorerView />
+                </>
+              }
+            />
+            <Route path="/analytics" element={<AnalyticsPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="*" element={<LandingPage />} />
+          </Routes>
+        </div>
       </main>
 
       <footer className="gg-footer">
         <div className="gg-footer-container">
           <div className="gg-footer-left">
             <span><strong>GreenGrid</strong> — Logistics Decision-Support System</span>
-            <span>IBM Z Datathon 2026 • LinuxONE & z/OS AI Architecture</span>
+            <span>Autonomous Freight Optimization • Multi-Objective Decision Engine</span>
           </div>
           <div className="gg-footer-right">
             <span>Verified Dataset: <strong>v2.1.1 Frozen Benchmark</strong></span>

@@ -67,7 +67,7 @@ export const LandingPage: React.FC = () => {
 
         <div className="landing-hero-content">
           <div className="landing-eyebrow">
-            <span className="landing-eyebrow-pill">IBM Z Datathon 2026</span>
+            <span className="landing-eyebrow-pill">Autonomous Supply Chain</span>
             <span className="landing-eyebrow-sep" />
             <span className="landing-eyebrow-text">Logistics Decision Support</span>
           </div>
@@ -87,7 +87,7 @@ export const LandingPage: React.FC = () => {
           </h1>
 
           <p className="landing-hero-sub">
-            Compare Air, Road, Rail, and Sea alternatives by cost, transit time, CO₂e emissions, and SLA compliance — powered by IBM Z LinuxONE and Watsonx Granite AI.
+            Compare Air, Road, Rail, and Sea alternatives by cost, transit time, CO₂e emissions, and SLA compliance — powered by advanced multi-objective optimization and generative AI decision rationale.
           </p>
 
           <div className="landing-hero-ctas">

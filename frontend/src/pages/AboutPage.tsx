@@ -6,7 +6,7 @@ export const AboutPage: React.FC = () => {
   return (
     <div className="about-root">
       <div className="about-hero">
-        <Badge variant="frost" className="about-badge">IBM Z Datathon 2026</Badge>
+        <Badge variant="frost" className="about-badge">Autonomous Freight Platform</Badge>
         <h1 className="about-title">About GreenGrid</h1>
         <p className="about-subtitle">
           Next-generation logistics decision-support platform optimizing freight route selections across transit velocity, operational cost, and CO₂e environmental impact.
@@ -23,14 +23,14 @@ export const AboutPage: React.FC = () => {
           </p>
         </Card>
 
-        <Card title="IBM Z Architecture" subtitle="Enterprise AI on LinuxONE">
+        <Card title="System Architecture" subtitle="High-Throughput Enterprise Resilience">
           <p className="about-p">
-            Built for mission-critical enterprise resilience, GreenGrid leverages the high-throughput, low-latency computing power of <strong>IBM Z Systems</strong> and <strong>LinuxONE</strong>:
+            Built for mission-critical enterprise resilience, GreenGrid leverages a high-throughput, low-latency microservices architecture:
           </p>
           <ul className="about-list">
             <li><strong>Data Service:</strong> Telemetry ingestion and catalog of 27 high-priority corridors and live disruption feeds.</li>
             <li><strong>Decision Engine:</strong> High-performance deterministic scoring evaluating 108 carrier routes simultaneously.</li>
-            <li><strong>AI Explanation Service:</strong> IBM Watsonx powered by <strong>Granite LLM</strong> generating natural language tradeoff justifications.</li>
+            <li><strong>AI Explanation Service:</strong> Generative reasoning engine synthesizing natural language tradeoff justifications.</li>
             <li><strong>User Dashboard:</strong> Ultra-responsive, zero-latency decision interface with liquid glass aesthetics.</li>
           </ul>
         </Card>
@@ -104,7 +104,7 @@ export const AboutPage: React.FC = () => {
             </div>
             <div className="about-member">
               <strong>Punith</strong>
-              <span>IBM Watsonx AI Service</span>
+              <span>AI Service & Reasoning Engine</span>
             </div>
             <div className="about-member">
               <strong>JP</strong>

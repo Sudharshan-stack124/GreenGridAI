@@ -187,7 +187,7 @@ export const mockService = {
     return latency({
       text: explanationText,
       explanation: explanationText,
-      confidence: "Synthesized AI Decision Model (Datathon Baseline)",
+      confidence: "Synthesized AI Decision Model (Enterprise Benchmark)",
       tradeoffs,
     }, 450);
   },

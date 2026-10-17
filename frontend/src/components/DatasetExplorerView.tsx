@@ -25,7 +25,7 @@ export const DatasetExplorerView: React.FC = () => {
     <div className="gg-dataset-explorer-view">
       <Card
         title="Frozen Benchmark Dataset Explorer (Version 2.1.1)"
-        subtitle="Audited and validated ground truth dataset for IBM Z Datathon 2026"
+        subtitle="Audited and validated ground truth telemetry for 27 freight corridors"
         icon={<PackageIcon size={16} />}
         right={
           <div className="gg-segmented-control">

@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="gg-brand-name-row">
                 <span className="gg-brand-title">GreenGrid</span>
                 <Badge variant="frost" className="gg-event-badge">
-                  IBM Z '26
+                  v2.1 Enterprise
                 </Badge>
               </div>
               <p className="gg-brand-tagline">
