@@ -72,12 +72,8 @@ export const LandingPage: React.FC = () => {
             <span className="landing-eyebrow-text">Logistics Decision Support</span>
           </div>
 
-          <div className="landing-logo-wrap">
-            <img
-              src={theme === "dark" ? "/greengrid-logo-white.png" : "/greengrid-logo-transparent.png"}
-              alt="GreenGrid"
-              className="landing-logo-img"
-            />
+          <div className="landing-hero-brand">
+            <span className="landing-hero-brand-name">Green Grid</span>
           </div>
 
           <h1 className="landing-hero-headline">

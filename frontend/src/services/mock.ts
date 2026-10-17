@@ -1,5 +1,5 @@
 // Official GreenGrid Mock Service
-// Powered by IBM Z Datathon 2026 Frozen Dataset (v2.1.1)
+// Powered by GreenGrid Frozen Dataset (v2.1.1)
 // Provides 100% authentic shipments, disruptions, transport options, and verified AI explanations.
 
 import { SHP_DATASET } from "../data/shipmentsData";

@@ -27,19 +27,12 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="gg-header">
       <div className="gg-header-container">
-        {/* Brand Section with Logo */}
+        {/* Brand Section — Pure Typographic Text */}
         <Link to="/" className="gg-brand-section-link">
           <div className="gg-brand-section">
-            <div className="gg-brand-logo-frame">
-              <img
-                src={theme === "dark" ? "/greengrid-logo-white.png" : "/greengrid-logo-transparent.png"}
-                alt="GreenGrid"
-                className="gg-brand-logo-img"
-              />
-            </div>
             <div className="gg-brand-titles">
               <div className="gg-brand-name-row">
-                <span className="gg-brand-title">GreenGrid</span>
+                <span className="gg-brand-title">Green Grid</span>
                 <Badge variant="frost" className="gg-event-badge">
                   v2.1 Enterprise
                 </Badge>

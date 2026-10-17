@@ -1,4 +1,4 @@
-// Data formatting utilities adhering to IBM Z Datathon 2026 guidelines
+// Data formatting utilities adhering to GreenGrid precision guidelines
 // GUARANTEE: Never display placeholder zero values as genuine cost, time, or emissions.
 
 export const isValidMetric = (v?: number | null): v is number =>

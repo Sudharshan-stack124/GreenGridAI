@@ -1,4 +1,4 @@
-// Official GreenGrid Data Types (Aligned with IBM Z Datathon 2026 Frozen Dataset v2.1.1)
+// Official GreenGrid Data Types (Aligned with Frozen Dataset v2.1.1)
 
 export interface Shipment {
   shipment_id: string;
