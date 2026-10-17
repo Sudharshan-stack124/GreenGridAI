@@ -1,0 +1,6 @@
+shipment_id,origin,destination,cargo_category,total_weight_tons,deadline_hours,priority,status
+SHP-F1-001,Silverstone UK,Monza Italy,Critical Racing Equipment,45.0,96.0,critical,in_transit
+SHP-F1-002,Baku Azerbaijan,Singapore Marina Bay,Pit Wall & Telemetry,28.5,120.0,high,scheduled
+SHP-F1-003,Austin USA,Mexico City Mexico,Paddock Hospitality & Spares,65.0,168.0,standard,scheduled
+SHP-F1-004,Suzuka Japan,Lusail Qatar,Power Unit Spares & Gearboxes,18.0,72.0,critical,in_transit
+SHP-F1-005,Spa Belgium,Zandvoort Netherlands,Tyre Warmers & Garage Gantries,35.0,48.0,high,scheduled

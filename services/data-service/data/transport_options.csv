@@ -1,0 +1,16 @@
+option_id,shipment_id,mode,provider_name,transit_time_hours,cost_usd,emissions_kg_co2e,is_feasible,infeasibility_reason,disruption_ids
+OPT-001,SHP-F1-001,air,DHL Global Forwarding,18.0,42500.0,14200.0,true,,NONE
+OPT-002,SHP-F1-001,road,Scania Euro 6 Fleet,34.0,14800.0,3800.0,true,,NONE
+OPT-003,SHP-F1-001,rail,DB Cargo Trans-Europe,44.0,9200.0,1150.0,true,,DIS-002
+OPT-004,SHP-F1-001,sea,Maersk Feeder Service,112.0,5100.0,1850.0,false,Exceeds 96.0 hour delivery deadline before paddock setup,NONE
+OPT-005,SHP-F1-002,air,Qatar Airways Cargo,14.0,58000.0,19500.0,true,,DIS-003
+OPT-006,SHP-F1-002,sea,MSC Mediterranean Shipping,160.0,11200.0,3100.0,false,Exceeds 120.0 hour race logistics deadline,DIS-001;DIS-003
+OPT-007,SHP-F1-002,rail_road,Silk Road Overland Freight,88.0,22000.0,5200.0,true,,NONE
+OPT-008,SHP-F1-003,road,Ryder Dedicated Logistics,36.0,8500.0,2900.0,true,,NONE
+OPT-009,SHP-F1-003,rail,Union Pacific Intermodal,52.0,5400.0,980.0,true,,NONE
+OPT-010,SHP-F1-003,air,FedEx Express Heavy,10.0,29000.0,8400.0,true,,NONE
+OPT-011,SHP-F1-004,air,Emirates SkyCargo,16.0,36000.0,11800.0,true,,NONE
+OPT-012,SHP-F1-004,sea,CMA CGM Express,180.0,6800.0,2400.0,false,Exceeds 72.0 hour deadline,DIS-001
+OPT-013,SHP-F1-005,road,DAF Clean Diesel Logistics,8.0,4200.0,650.0,true,,NONE
+OPT-014,SHP-F1-005,rail,NS Cargo Electric Rail,12.0,2800.0,140.0,true,,NONE
+OPT-015,SHP-F1-005,sea,Rotterdam Short Sea Barge,0.0,0.0,0.0,false,No viable direct inland waterway connecting Spa and Zandvoort,DIS-004

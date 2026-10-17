@@ -1,0 +1,6 @@
+disruption_id,title,type,affected_modes,severity,location_name,delay_hours_impact,cost_multiplier_impact,description,active
+DIS-001,Suez Canal Vessel Congestion,chokepoint_delay,sea,high,Suez Canal Egypt,48.0,1.25,Severe container backlog causing critical sea transit delays,true
+DIS-002,Alpine Freight Rail Maintenance,infrastructure,rail,medium,Gotthard Base Tunnel Switzerland,18.0,1.10,Scheduled track maintenance restricting trans-European rail freight,true
+DIS-003,Strait of Malacca Monsoon Storm,weather,sea;air,critical,Singapore Strait,36.0,1.35,Severe tropical storm grounding cargo flights and diverting coastal sea routes,true
+DIS-004,Rotterdam Port Crane Strike,labor_dispute,sea,high,Port of Rotterdam Netherlands,24.0,1.20,Port handlers strike delaying standard container discharge,true
+DIS-005,Heathrow Air Cargo Terminal Backlog,customs_clearance,air,low,London Heathrow Airport UK,8.0,1.05,Customs inspection delays affecting non-priority cargo,false
