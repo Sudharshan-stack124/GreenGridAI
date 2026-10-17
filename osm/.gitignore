@@ -1,0 +1,26 @@
+# Raw OpenStreetMap extracts
+*.osm.pbf
+
+# Temporary geographic exports
+*.geojson
+*.geojsonseq
+
+# Downloaded index and logs
+geofabrik-index-v1.json
+logs/
+*.log
+
+# Python environments and cache
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Generated regional datasets — keep locally, don't commit
+output/*.csv
+output/manifest.json
