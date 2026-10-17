@@ -12,6 +12,7 @@ from schemas import (
     HealthStatus,
 )
 from loader import DataLoader
+from osm_service import OSMLoader, OSMFacility, OSMSummary
 
 data_loader = DataLoader()
 
@@ -149,6 +150,76 @@ def get_shipment_options(
     if feasible_only:
         options = [opt for opt in options if opt.feasibility_status.lower() != "infeasible"]
     return options
+
+# ---------------------------------------------------------------------------
+# OSM — Supplementary Logistics Facility Endpoints
+# These endpoints expose OpenStreetMap facility data and are entirely separate
+# from the official GreenGrid V2.1.1 dataset and its integrity checks.
+# ---------------------------------------------------------------------------
+
+osm_loader = OSMLoader()
+
+
+@app.get("/osm/health", tags=["OSM Facilities"])
+def osm_health():
+    """
+    OSM module health check.
+    Returns facility count and data directory without affecting V2.1.1 integrity.
+    """
+    osm_loader.load()
+    return {
+        "status": "ok",
+        "module": "osm-facilities",
+        "data_directory": osm_loader.osm_data_dir,
+        "facility_count": len(osm_loader.facilities),
+        "note": "OSM data is supplementary only. Not part of GreenGrid V2.1.1 dataset.",
+    }
+
+
+@app.get("/osm/summary", response_model=OSMSummary, tags=["OSM Facilities"])
+def osm_summary():
+    """
+    Aggregate statistics for all loaded OSM logistics facilities:
+    facility type breakdown, countries, and source files.
+    """
+    return osm_loader.get_summary()
+
+
+@app.get("/osm/facilities", response_model=List[OSMFacility], tags=["OSM Facilities"])
+def list_osm_facilities(
+    facility_type: Optional[str] = Query(None, description="Filter by facility type, e.g. warehouse, port, airport"),
+    country: Optional[str] = Query(None, description="Filter by country name (case-insensitive)"),
+    name_contains: Optional[str] = Query(None, description="Substring match on facility name (case-insensitive)"),
+    limit: int = Query(100, ge=1, le=1000, description="Maximum records to return (1–1000)"),
+    offset: int = Query(0, ge=0, description="Pagination offset"),
+):
+    """
+    List OSM logistics facilities with optional filters and pagination.
+    Returns an empty list (not an error) when no OSM data files are present.
+    """
+    results = osm_loader.filter(
+        facility_type=facility_type,
+        country=country,
+        name_contains=name_contains,
+    )
+    return results[offset: offset + limit]
+
+
+@app.get("/osm/facilities/{osm_id}", response_model=OSMFacility, tags=["OSM Facilities"])
+def get_osm_facility(osm_id: str):
+    """
+    Retrieve a single OSM facility by its OSM ID.
+    Returns HTTP 404 if not found.
+    """
+    osm_loader.load()
+    for facility in osm_loader.facilities:
+        if facility.osm_id == osm_id:
+            return facility
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"OSM facility with ID '{osm_id}' not found.",
+    )
+
 
 if __name__ == "__main__":
     import uvicorn

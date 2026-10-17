@@ -1,0 +1,16 @@
+osm_id,name,facility_type,lat,lon,country,city,address,tags_json
+n1001,Bahrain Logistics Gate,warehouse,26.031,50.512,Bahrain,Sakhir,,"{""operator"":""BIC"",""access"":""freight""}"
+n1002,Jeddah Islamic Port,port,21.533,39.156,Saudi Arabia,Jeddah,,"{""port:type"":""seaport"",""cargo"":""yes""}"
+n1003,Melbourne Airport Cargo,airport,37.6690,144.8410,Australia,Melbourne,Melbourne Airport VIC 3045,"{""aeroway"":""aerodrome"",""cargo"":""yes""}"
+n1004,Suzuka Freight Depot,warehouse,34.844,136.534,Japan,Suzuka,,
+n1005,Shanghai Yangshan Port,port,30.6239,122.0612,China,Shanghai,,"{""port:type"":""seaport"",""container"":""yes""}"
+n1006,Barcelona Cargo Terminal,warehouse,41.298,2.083,Spain,Barcelona,,"{""operator"":""SEUR""}"
+n1007,Singapore Changi Air Cargo,airport,1.3521,103.9940,Singapore,Singapore,,"{""aeroway"":""aerodrome"",""cargo"":""yes"",""icao"":""WSSS""}"
+n1008,Dubai World Central,airport,24.8964,55.1614,UAE,Dubai,,"{""aeroway"":""aerodrome"",""cargo"":""yes""}"
+n1009,Silverstone Freight Gate,warehouse,52.0786,-1.0169,United Kingdom,Silverstone,,"{""access"":""freight"",""operator"":""BRDC""}"
+n1010,Monza Autodrome Depot,warehouse,45.6156,9.2811,Italy,Monza,,"{""access"":""freight""}"
+n1011,Rotterdam Europoort,port,51.9225,4.4792,Netherlands,Rotterdam,,"{""port:type"":""seaport"",""container"":""yes"",""operator"":""Maasvlakte""}"
+n1012,Frankfurt Airport Cargo City,airport,50.0333,8.5706,Germany,Frankfurt,,"{""aeroway"":""aerodrome"",""cargo"":""yes"",""icao"":""EDDF""}"
+n1013,Baku Alat Free Zone,warehouse,40.1100,49.5700,Azerbaijan,Baku,,"{""landuse"":""industrial"",""operator"":""BFEZ""}"
+n1014,Miami Seaport,port,25.7738,-80.1743,USA,Miami,,"{""port:type"":""seaport"",""container"":""yes""}"
+n1015,São Paulo Guarulhos Cargo,airport,-23.4356,-46.4731,Brazil,São Paulo,,"{""aeroway"":""aerodrome"",""cargo"":""yes""}"

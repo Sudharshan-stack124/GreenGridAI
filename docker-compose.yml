@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  data-service:
+    build:
+      context: ./services/data-service
+      dockerfile: Dockerfile
+    image: greengrid-data-service:2.1.1
+    container_name: greengrid-data-service
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      PORT: "8001"
+      GREENGRID_DATA_DIR: /app/data
+    volumes:
+      # Mount data directory so dataset updates don't require rebuild
+      - ./services/data-service/data:/app/data:ro
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ── Optional: Reverse proxy (uncomment for production) ──────────────────
+  # nginx:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./deploy/nginx.conf:/etc/nginx/nginx.conf:ro
+  #   depends_on:
+  #     - data-service
+
+networks:
+  default:
+    name: greengrid-net
