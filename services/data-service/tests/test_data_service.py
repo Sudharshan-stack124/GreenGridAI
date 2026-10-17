@@ -43,10 +43,12 @@ def test_get_health():
     assert data["status"] == "ok"
     assert data["service"] == "data-service"
     assert data["version"] == "2.1.1"
+    assert data["dataset_version"] == "Version 2.1.1 (Official Frozen Dataset)"
     assert data["dataset_status"] == "verified"
     assert data["integrity_verified"] is True
     assert data["loaded_records"]["shipments"] == 27
     assert data["loaded_records"]["transport_options"] == 108
+    assert data["loaded_records"]["disruptions"] == 5
 
 def test_get_all_shipments():
     response = client.get("/shipments")
@@ -57,6 +59,8 @@ def test_get_all_shipments():
     comm_shipments = [s for s in shipments if s["use_case_type"] == "Commercial_General"]
     assert len(f1_shipments) == 23
     assert len(comm_shipments) == 4
+    # Ensure all shipments carry dataset_version metadata
+    assert all(s["dataset_version"] == "2.1.1" for s in shipments)
 
 def test_shipment_filters():
     # Filter by domain
@@ -73,6 +77,11 @@ def test_shipment_filters():
     assert resp_country.status_code == 200
     assert len(resp_country.json()) >= 1
 
+    # Filter by min_weight_tonnes
+    resp_weight = client.get("/shipments?min_weight_tonnes=1000")
+    assert resp_weight.status_code == 200
+    assert all(s["cargo_weight_tonnes"] >= 1000 for s in resp_weight.json())
+
 def test_get_valid_shipment_shp01():
     response = client.get("/shipments/SHP-01")
     assert response.status_code == 200
@@ -86,11 +95,13 @@ def test_get_valid_shipment_shp01():
     assert data["departure_date"] == "2027-03-15"
     assert data["delivery_deadline"] == "2027-03-18"
     assert data["available_window_days"] == 3.0
+    assert data["dataset_version"] == "2.1.1"
 
 def test_get_unknown_shipment_404():
     response = client.get("/shipments/NON_EXISTENT_ID")
     assert response.status_code == 404
     data = response.json()
+    assert "detail" in data
     assert "not found" in data["detail"].lower()
 
 def test_get_all_disruptions():
@@ -105,6 +116,7 @@ def test_get_all_disruptions():
     resp_sea = client.get("/disruptions?affected_mode=Sea")
     assert resp_sea.status_code == 200
     assert len(resp_sea.json()) >= 2
+    assert all(d["affected_mode"] == "Sea" for d in resp_sea.json())
 
 def test_get_shipment_options_shp01():
     response = client.get("/shipments/SHP-01/options")
@@ -113,6 +125,7 @@ def test_get_shipment_options_shp01():
     assert len(options) == 4
     modes = [opt["mode"] for opt in options]
     assert set(modes) == {"Air", "Road", "Rail", "Sea"}
+    assert all(opt["dataset_version"] == "2.1.1" for opt in options)
 
 def test_get_shipment_options_feasible_filter():
     response_all = client.get("/shipments/SHP-01/options")
@@ -186,3 +199,13 @@ def test_empty_disruption_id_handling(tmp_path):
     loader.load_disruptions()
     assert len(loader.disruptions) == 1
     assert "DIS-99" in loader.disruptions
+
+def test_missing_transport_options_file_error(tmp_path):
+    loader = DataLoader(data_dir=str(tmp_path))
+    with pytest.raises(FileNotFoundError):
+        loader.load_transport_options()
+
+def test_missing_disruptions_file_error(tmp_path):
+    loader = DataLoader(data_dir=str(tmp_path))
+    with pytest.raises(FileNotFoundError):
+        loader.load_disruptions()
