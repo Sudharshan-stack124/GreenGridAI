@@ -1,27 +1,21 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { api } from "./services/api";
 import { config } from "./config";
 import type { Disruption, Explanation, Recommendation, Shipment } from "./types";
 import { Header } from "./components/Header";
 import { StatOverview } from "./components/StatOverview";
-import { ShipmentPanel } from "./components/ShipmentPanel";
-import { DisruptionPanel } from "./components/DisruptionPanel";
-import { ShipmentDetails } from "./components/ShipmentDetails";
-import { DisruptionImpactAlert } from "./components/DisruptionImpactAlert";
-import { RecommendationHero } from "./components/RecommendationHero";
-import { RankedAlternativesTable } from "./components/RankedAlternativesTable";
-import { ComparisonCharts } from "./components/ComparisonCharts";
-import { AIExplanationCard } from "./components/AIExplanationCard";
 import { ScenariosView } from "./components/ScenariosView";
 import { DatasetExplorerView } from "./components/DatasetExplorerView";
-import { Card } from "./components/ui/Card";
-import { Spinner } from "./components/ui/Spinner";
-import { ErrorState } from "./components/ui/ErrorState";
-import { CompassIcon, ShieldAlertIcon, CheckIcon } from "./components/ui/Icons";
+import { LandingPage } from "./pages/LandingPage";
+import { DashboardPage } from "./pages/DashboardPage";
+import { AboutPage } from "./pages/AboutPage";
+import { Cursor } from "./components/Cursor";
+import { ThemeProvider } from "./context/ThemeContext";
 
-export default function App() {
+function MainContent() {
+  const navigate = useNavigate();
   const [useMocks, setUseMocks] = useState(config.useMocks);
-  const [activeTab, setActiveTab] = useState<"dashboard" | "scenarios" | "dataset">("dashboard");
 
   // Remote / Mock Data States
   const [shipments, setShipments] = useState<Shipment[] | null>(null);
@@ -55,7 +49,6 @@ export default function App() {
       setShipments(shpData);
       setDisruptions(disData);
 
-      // Default select the first shipment if none selected
       if (!selectedShipmentId && shpData.length > 0) {
         setSelectedShipmentId(shpData[0].shipment_id);
       }
@@ -70,10 +63,6 @@ export default function App() {
     config.useMocks = useMocks;
     loadInitialData();
   }, [useMocks, loadInitialData]);
-
-  // Selected entities
-  const currentShipment = shipments?.find((s) => s.shipment_id === selectedShipmentId) ?? null;
-  const currentDisruption = disruptions?.find((d) => d.disruption_id === selectedDisruptionId) ?? null;
 
   // Execute Analysis
   const handleAnalyse = useCallback(async (shpId = selectedShipmentId, disId = selectedDisruptionId) => {
@@ -108,22 +97,23 @@ export default function App() {
     }
   }, [selectedShipmentId, selectedDisruptionId]);
 
-  // Handler for loading a scenario from the Scenarios View
+  // Handler for loading scenario from Scenarios page
   const handleLoadScenario = useCallback((shipmentId: string, disruptionId: string | null) => {
     setSelectedShipmentId(shipmentId);
     setSelectedDisruptionId(disruptionId);
-    setActiveTab("dashboard");
-    // Trigger analysis for that scenario immediately
+    navigate("/dashboard");
     handleAnalyse(shipmentId, disruptionId);
-  }, [handleAnalyse]);
+  }, [navigate, handleAnalyse]);
+
+  const currentShipment = shipments?.find((s) => s.shipment_id === selectedShipmentId) ?? null;
+  const currentDisruption = disruptions?.find((d) => d.disruption_id === selectedDisruptionId) ?? null;
 
   return (
     <div className="gg-app-root">
+      <Cursor />
       <Header
         useMocks={useMocks}
         onToggleMocks={setUseMocks}
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
       />
 
       {useMocks && (
@@ -138,159 +128,87 @@ export default function App() {
       )}
 
       <main className="gg-main-layout" id="main-content">
-        <StatOverview
-          totalShipments={shipments?.length ?? 27}
-          totalDisruptions={disruptions?.length ?? 5}
-          selectedShipment={currentShipment}
-          selectedDisruption={currentDisruption}
-        />
-
-        {activeTab === "scenarios" ? (
-          <ScenariosView onLoadScenario={handleLoadScenario} />
-        ) : activeTab === "dataset" ? (
-          <DatasetExplorerView />
-        ) : (
-          <div className="gg-dashboard-split">
-            {/* Left Controls Column */}
-            <aside className="gg-sidebar-col">
-              <ShipmentPanel
-                shipments={shipments}
-                loading={loadingInitial}
-                error={initialError}
-                selectedId={selectedShipmentId}
-                onSelect={(id) => {
-                  setSelectedShipmentId(id);
-                  setRecommendation(null);
-                  setExplanation(null);
-                }}
-                onRetry={loadInitialData}
-              />
-
-              <DisruptionPanel
-                disruptions={disruptions}
-                loading={loadingInitial}
-                error={initialError}
-                selectedId={selectedDisruptionId}
-                onSelect={(id) => {
-                  setSelectedDisruptionId(id);
-                  setRecommendation(null);
-                  setExplanation(null);
-                }}
-                onRetry={loadInitialData}
-              />
-
-              <div className="gg-cta-wrap">
-                <button
-                  type="button"
-                  className="gg-primary-cta"
-                  disabled={!selectedShipmentId || isAnalysing}
-                  onClick={() => handleAnalyse()}
-                >
-                  {isAnalysing ? (
-                    <span className="gg-cta-loading">
-                      <span className="gg-btn-spinner" /> Evaluating Corridor...
-                    </span>
-                  ) : (
-                    <span>Analyse Freight Corridor</span>
-                  )}
-                </button>
-                <div className="gg-cta-caption">
-                  Evaluates Air, Road, Rail, and Sea against SLA deadlines, expenditure, and carbon footprint.
-                </div>
-              </div>
-            </aside>
-
-            {/* Right Telemetry & Results Column */}
-            <section className="gg-results-col" aria-label="Analysis Results">
-              <ShipmentDetails shipment={currentShipment} />
-
-              {currentDisruption && (
-                <DisruptionImpactAlert
-                  disruption={currentDisruption}
-                  onClear={() => {
-                    setSelectedDisruptionId(null);
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <>
+                <StatOverview
+                  totalShipments={shipments?.length ?? 27}
+                  totalDisruptions={disruptions?.length ?? 5}
+                  selectedShipment={currentShipment}
+                  selectedDisruption={currentDisruption}
+                />
+                <DashboardPage
+                  shipments={shipments}
+                  disruptions={disruptions}
+                  loadingInitial={loadingInitial}
+                  initialError={initialError}
+                  selectedShipmentId={selectedShipmentId}
+                  selectedDisruptionId={selectedDisruptionId}
+                  setSelectedShipmentId={(id) => {
+                    setSelectedShipmentId(id);
                     setRecommendation(null);
                     setExplanation(null);
                   }}
+                  setSelectedDisruptionId={(id) => {
+                    setSelectedDisruptionId(id);
+                    setRecommendation(null);
+                    setExplanation(null);
+                  }}
+                  isAnalysing={isAnalysing}
+                  analysisError={analysisError}
+                  recommendation={recommendation}
+                  isExplaining={isExplaining}
+                  explanationError={explanationError}
+                  explanation={explanation}
+                  handleAnalyse={handleAnalyse}
+                  loadInitialData={loadInitialData}
+                  onRetryExplain={() => {
+                    if (recommendation) {
+                      setIsExplaining(true);
+                      api.explain(recommendation)
+                        .then(setExplanation)
+                        .catch((e: Error) => setExplanationError(e.message))
+                        .finally(() => setIsExplaining(false));
+                    }
+                  }}
                 />
-              )}
-
-              {isAnalysing ? (
-                <Card title="Decision Engine Multimodal Analysis" icon={<CompassIcon size={16} />}>
-                  <div className="gg-analysing-state">
-                    <Spinner label="Evaluating routes against circuity, DEFRA emission factors, and delivery SLA..." size="lg" />
-                  </div>
-                </Card>
-              ) : analysisError ? (
-                <Card title="Analysis Execution Error" icon={<ShieldAlertIcon size={16} />}>
-                  <ErrorState
-                    title="Decision Engine Error"
-                    message={analysisError}
-                    onRetry={() => handleAnalyse()}
-                  />
-                </Card>
-              ) : !recommendation ? (
-                <Card
-                  title="Decision Engine Ready"
-                  subtitle="Select shipment route and disruption scenario, then evaluate"
-                  icon={<CheckIcon size={16} />}
-                >
-                  <div className="gg-onboarding-box">
-                    <div className="gg-onboarding-graphic">
-                      <CompassIcon size={36} />
-                    </div>
-                    <h3>Multimodal Evaluation Ready</h3>
-                    <p>
-                      Select any of the 27 monitored shipments from the catalog and optionally inject an active disruption scenario to evaluate alternative carrier networks.
-                    </p>
-                    <button
-                      type="button"
-                      className="gg-secondary-btn"
-                      onClick={() => handleAnalyse()}
-                      disabled={!selectedShipmentId}
-                    >
-                      Analyse {selectedShipmentId || "Selected Corridor"}
-                    </button>
-                  </div>
-                </Card>
-              ) : (
-                <div className="gg-results-stream">
-                  {/* Top Recommendation Banner */}
-                  <RecommendationHero
-                    topOption={recommendation.recommendedOption}
-                    disruption={recommendation.disruption}
-                    availableWindowDays={currentShipment?.available_window_days}
-                  />
-
-                  {/* Ranked Alternatives Table */}
-                  <RankedAlternativesTable options={recommendation.options} />
-
-                  {/* Multimodal Tradeoff Visualizations */}
-                  <ComparisonCharts
-                    options={recommendation.options}
-                    availableWindowDays={currentShipment?.available_window_days}
-                  />
-
-                  {/* AI Explanation Service Card */}
-                  <AIExplanationCard
-                    explanation={explanation}
-                    loading={isExplaining}
-                    error={explanationError}
-                    onRetry={() => {
-                      if (recommendation) {
-                        setIsExplaining(true);
-                        api.explain(recommendation)
-                          .then(setExplanation)
-                          .catch((e: Error) => setExplanationError(e.message))
-                          .finally(() => setIsExplaining(false));
-                      }
-                    }}
-                  />
-                </div>
-              )}
-            </section>
-          </div>
-        )}
+              </>
+            }
+          />
+          <Route
+            path="/scenarios"
+            element={
+              <>
+                <StatOverview
+                  totalShipments={shipments?.length ?? 27}
+                  totalDisruptions={disruptions?.length ?? 5}
+                  selectedShipment={currentShipment}
+                  selectedDisruption={currentDisruption}
+                />
+                <ScenariosView onLoadScenario={handleLoadScenario} />
+              </>
+            }
+          />
+          <Route
+            path="/dataset"
+            element={
+              <>
+                <StatOverview
+                  totalShipments={shipments?.length ?? 27}
+                  totalDisruptions={disruptions?.length ?? 5}
+                  selectedShipment={currentShipment}
+                  selectedDisruption={currentDisruption}
+                />
+                <DatasetExplorerView />
+              </>
+            }
+          />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="*" element={<LandingPage />} />
+        </Routes>
       </main>
 
       <footer className="gg-footer">
@@ -306,5 +224,15 @@ export default function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <BrowserRouter>
+        <MainContent />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }

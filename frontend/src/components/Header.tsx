@@ -1,65 +1,103 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Badge } from "./ui/Badge";
+import { useTheme } from "../context/ThemeContext";
 
 interface HeaderProps {
   useMocks: boolean;
   onToggleMocks: (useMocks: boolean) => void;
-  activeTab: "dashboard" | "scenarios" | "dataset";
-  onSelectTab: (tab: "dashboard" | "scenarios" | "dataset") => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   useMocks,
   onToggleMocks,
-  activeTab,
-  onSelectTab,
 }) => {
+  const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
+
+  const navLinks = [
+    { to: "/", label: "Home" },
+    { to: "/dashboard", label: "Dashboard" },
+    { to: "/scenarios", label: "Scenarios" },
+    { to: "/dataset", label: "Dataset" },
+    { to: "/about", label: "About" },
+  ];
+
   return (
     <header className="gg-header">
       <div className="gg-header-container">
-        <div className="gg-brand-section">
-          <div className="gg-brand-logo">
-            <span className="gg-logo-inner" />
-          </div>
-          <div className="gg-brand-titles">
-            <div className="gg-brand-name-row">
-              <span className="gg-brand-title">GreenGrid</span>
-              <span className="gg-brand-sub">Platform</span>
-              <Badge variant="frost" className="gg-event-badge">
-                IBM Z Datathon 2026
-              </Badge>
+        {/* Brand Section with Logo */}
+        <Link to="/" className="gg-brand-section-link">
+          <div className="gg-brand-section">
+            <div className="gg-brand-logo-frame">
+              <img
+                src="/greengrid-logo.jpg"
+                alt="GreenGrid Logo"
+                className="gg-brand-logo-img"
+              />
             </div>
-            <p className="gg-brand-tagline">
-              Autonomous Logistics Decision Support & Disruption Rerouting
-            </p>
+            <div className="gg-brand-titles">
+              <div className="gg-brand-name-row">
+                <span className="gg-brand-title">GreenGrid</span>
+                <Badge variant="frost" className="gg-event-badge">
+                  IBM Z '26
+                </Badge>
+              </div>
+              <p className="gg-brand-tagline">
+                Autonomous Logistics Decision Support
+              </p>
+            </div>
           </div>
-        </div>
+        </Link>
 
+        {/* Multi-Page Navigation */}
         <div className="gg-header-actions">
           <nav className="gg-header-segmented-nav" aria-label="Main Navigation">
-            <button
-              type="button"
-              className={`gg-nav-segment ${activeTab === "dashboard" ? "active" : ""}`}
-              onClick={() => onSelectTab("dashboard")}
-            >
-              Dashboard
-            </button>
-            <button
-              type="button"
-              className={`gg-nav-segment ${activeTab === "scenarios" ? "active" : ""}`}
-              onClick={() => onSelectTab("scenarios")}
-            >
-              Disruption Matrix
-            </button>
-            <button
-              type="button"
-              className={`gg-nav-segment ${activeTab === "dataset" ? "active" : ""}`}
-              onClick={() => onSelectTab("dataset")}
-            >
-              Dataset v2.1.1
-            </button>
+            {navLinks.map((item) => {
+              const isActive = location.pathname === item.to;
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`gg-nav-segment ${isActive ? "active" : ""}`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
+          {/* Theme Toggle (Dark / Light) */}
+          <button
+            type="button"
+            className="gg-theme-toggle"
+            onClick={toggleTheme}
+            title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
+            aria-label="Toggle visual theme"
+          >
+            {theme === "dark" ? (
+              // Sun icon for dark mode (click to go light)
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            ) : (
+              // Moon icon for light mode (click to go dark)
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            )}
+            <span className="gg-theme-label">{theme === "dark" ? "Light" : "Dark"}</span>
+          </button>
+
+          {/* System Mode Toggle */}
           <div className="gg-system-mode-toggle">
             <button
               type="button"
