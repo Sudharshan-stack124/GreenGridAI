@@ -10,6 +10,7 @@ import { DatasetExplorerView } from "./components/DatasetExplorerView";
 import { LandingPage } from "./pages/LandingPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { AboutPage } from "./pages/AboutPage";
+import { AnalyticsPage } from "./pages/AnalyticsPage";
 import { Cursor } from "./components/Cursor";
 import { ThemeProvider } from "./context/ThemeContext";
 
@@ -206,6 +207,7 @@ function MainContent() {
               </>
             }
           />
+          <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<LandingPage />} />
         </Routes>

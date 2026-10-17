@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { SHP_DATASET } from "../data/shipmentsData";
 import { DIS_DATASET } from "../data/disruptionsData";
 import type { Shipment, Disruption } from "../types";
+import { useTheme } from "../context/ThemeContext";
 
 const COUNTER_TARGETS = [
   { label: "Monitored Shipments", value: 27 },
@@ -45,6 +46,7 @@ function StatCounter({ value, label, delay = 0 }: { value: number; label: string
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const heroRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -72,7 +74,7 @@ export const LandingPage: React.FC = () => {
 
           <div className="landing-logo-wrap">
             <img
-              src="/greengrid-logo.jpg"
+              src={theme === "dark" ? "/greengrid-logo-white.png" : "/greengrid-logo-transparent.png"}
               alt="GreenGrid"
               className="landing-logo-img"
             />

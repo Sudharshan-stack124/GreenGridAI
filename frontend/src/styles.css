@@ -2661,3 +2661,254 @@ body {
     display: none;
   }
 }
+
+
+/* ==========================================================================
+   Apple Segmented Theme Switcher Pill (Top Header)
+   ========================================================================== */
+.gg-theme-switcher-pill {
+  display: inline-flex;
+  align-items: center;
+  background: var(--liquid-glass-subtle);
+  border: 1px solid var(--liquid-border-medium);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+  gap: 2px;
+  backdrop-filter: blur(20px);
+}
+
+.gg-theme-segment {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-family: var(--font-apple);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gg-theme-segment:hover {
+  color: var(--text-primary);
+}
+
+.gg-theme-segment.active {
+  background: var(--text-primary);
+  color: var(--apple-black);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .gg-theme-segment.active {
+  background: #ffffff;
+  color: #1d1d1f;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* ==========================================================================
+   Apple Ultra-Bold Typography Enhancements
+   ========================================================================== */
+h1, h2, h3, h4, .gg-brand-title, .gg-stat-value, .gg-metric-value, .gg-hero-title {
+  font-weight: 900 !important;
+  letter-spacing: -0.03em !important;
+}
+
+.gg-nav-segment {
+  font-weight: 800 !important;
+}
+
+.gg-primary-cta, .landing-cta-primary {
+  font-weight: 900 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* ==========================================================================
+   Corridor Analytics Page Styles
+   ========================================================================== */
+.analytics-root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0 80px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.analytics-hero {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.analytics-title {
+  font-size: clamp(34px, 5vw, 56px);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  color: var(--text-primary);
+}
+
+.analytics-subtitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  max-width: 680px;
+}
+
+.analytics-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.analytics-kpi-card {
+  background: var(--liquid-glass-card);
+  border: 1px solid var(--liquid-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  backdrop-filter: blur(40px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: var(--transition-fast);
+}
+
+.analytics-kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--liquid-border-medium);
+  box-shadow: var(--shadow-card);
+}
+
+.analytics-kpi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.analytics-kpi-mode {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+.analytics-kpi-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.analytics-kpi-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--liquid-border-subtle);
+  padding-bottom: 6px;
+}
+
+.analytics-kpi-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-tertiary);
+}
+
+.analytics-kpi-value {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.analytics-table-wrap {
+  overflow-x: auto;
+}
+
+.analytics-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.analytics-table th {
+  padding: 12px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary);
+  border-bottom: 1px solid var(--liquid-border-medium);
+}
+
+.analytics-table td {
+  padding: 14px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--liquid-border-subtle);
+  color: var(--text-secondary);
+}
+
+.analytics-table td strong {
+  color: var(--text-primary);
+}
+
+.analytics-filter-pills {
+  display: flex;
+  gap: 6px;
+}
+
+.analytics-filter-btn {
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--liquid-border-subtle);
+  background: var(--liquid-glass-subtle);
+  color: var(--text-secondary);
+  font-family: var(--font-apple);
+  font-size: 11.5px;
+  font-weight: 800;
+  transition: var(--transition-fast);
+}
+
+.analytics-filter-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--liquid-border-bright);
+}
+
+.analytics-filter-btn.active {
+  background: var(--text-primary);
+  color: var(--apple-black);
+  border-color: transparent;
+}
+
+.analytics-mode-pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--liquid-glass-subtle);
+  color: var(--text-primary);
+}
+
+.analytics-more-note {
+  padding: 14px 10px 4px 10px;
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+}
+
+.analytics-more-note a {
+  color: var(--text-primary);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .analytics-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

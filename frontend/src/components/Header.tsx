@@ -20,6 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
     { to: "/dashboard", label: "Dashboard" },
     { to: "/scenarios", label: "Scenarios" },
     { to: "/dataset", label: "Dataset" },
+    { to: "/analytics", label: "Analytics" },
     { to: "/about", label: "About" },
   ];
 
@@ -31,8 +32,8 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="gg-brand-section">
             <div className="gg-brand-logo-frame">
               <img
-                src="/greengrid-logo.jpg"
-                alt="GreenGrid Logo"
+                src={theme === "dark" ? "/greengrid-logo-white.png" : "/greengrid-logo-transparent.png"}
+                alt="GreenGrid"
                 className="gg-brand-logo-img"
               />
             </div>
@@ -50,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </Link>
 
-        {/* Multi-Page Navigation */}
+        {/* Multi-Page Navigation Links */}
         <div className="gg-header-actions">
           <nav className="gg-header-segmented-nav" aria-label="Main Navigation">
             {navLinks.map((item) => {
@@ -67,17 +68,15 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          {/* Theme Toggle (Dark / Light) */}
-          <button
-            type="button"
-            className="gg-theme-toggle"
-            onClick={toggleTheme}
-            title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
-            aria-label="Toggle visual theme"
-          >
-            {theme === "dark" ? (
-              // Sun icon for dark mode (click to go light)
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          {/* Apple-style Theme Switcher Pill */}
+          <div className="gg-theme-switcher-pill" role="radiogroup" aria-label="Theme selection">
+            <button
+              type="button"
+              className={`gg-theme-segment ${theme === "light" ? "active" : ""}`}
+              onClick={() => theme !== "light" && toggleTheme()}
+              title="Switch to Apple Light Mode"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="5" />
                 <line x1="12" y1="1" x2="12" y2="3" />
                 <line x1="12" y1="21" x2="12" y2="23" />
@@ -88,14 +87,20 @@ export const Header: React.FC<HeaderProps> = ({
                 <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
               </svg>
-            ) : (
-              // Moon icon for light mode (click to go dark)
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <span>Light</span>
+            </button>
+            <button
+              type="button"
+              className={`gg-theme-segment ${theme === "dark" ? "active" : ""}`}
+              onClick={() => theme !== "dark" && toggleTheme()}
+              title="Switch to Apple Dark Mode"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
               </svg>
-            )}
-            <span className="gg-theme-label">{theme === "dark" ? "Light" : "Dark"}</span>
-          </button>
+              <span>Dark</span>
+            </button>
+          </div>
 
           {/* System Mode Toggle */}
           <div className="gg-system-mode-toggle">
