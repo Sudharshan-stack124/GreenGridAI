@@ -4,6 +4,7 @@ import { Card } from "./ui/Card";
 import { Spinner } from "./ui/Spinner";
 import { ErrorState } from "./ui/ErrorState";
 import { Badge } from "./ui/Badge";
+import { SearchIcon, PackageIcon } from "./ui/Icons";
 
 interface ShipmentPanelProps {
   shipments: Shipment[] | null;
@@ -28,11 +29,9 @@ export const ShipmentPanel: React.FC<ShipmentPanelProps> = ({
   const filtered = useMemo(() => {
     if (!shipments) return [];
     return shipments.filter((s) => {
-      // Category filter
       if (filterType === "F1" && s.use_case_type !== "F1_Demonstration") return false;
       if (filterType === "COMM" && s.use_case_type !== "Commercial_General") return false;
 
-      // Text search
       if (!search.trim()) return true;
       const q = search.toLowerCase();
       return (
@@ -50,20 +49,20 @@ export const ShipmentPanel: React.FC<ShipmentPanelProps> = ({
     <Card
       title="Shipment Selection"
       subtitle="Select a verified freight movement"
-      icon="📦"
+      icon={<PackageIcon size={16} />}
       right={
-        <Badge variant="neutral">
+        <Badge variant="titanium">
           {filtered.length} of {shipments?.length ?? 0}
         </Badge>
       }
     >
       <div className="gg-panel-controls">
         <div className="gg-search-wrap">
-          <span className="gg-search-icon">🔍</span>
+          <SearchIcon size={14} className="gg-search-icon" />
           <input
             type="search"
             className="gg-input gg-search-input"
-            placeholder="Search by ID, city, country, or cargo..."
+            placeholder="Search by ID, city, or cargo..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             aria-label="Search shipments"
@@ -75,38 +74,38 @@ export const ShipmentPanel: React.FC<ShipmentPanelProps> = ({
               onClick={() => setSearch("")}
               aria-label="Clear search"
             >
-              ✕
+              ×
             </button>
           )}
         </div>
 
-        <div className="gg-filter-pills" role="radiogroup" aria-label="Filter shipments by use case">
+        <div className="gg-segmented-control" role="radiogroup" aria-label="Filter shipments by category">
           <button
             type="button"
-            className={`gg-filter-pill ${filterType === "ALL" ? "active" : ""}`}
+            className={`gg-segment-btn ${filterType === "ALL" ? "active" : ""}`}
             onClick={() => setFilterType("ALL")}
           >
             All (27)
           </button>
           <button
             type="button"
-            className={`gg-filter-pill ${filterType === "F1" ? "active" : ""}`}
+            className={`gg-segment-btn ${filterType === "F1" ? "active" : ""}`}
             onClick={() => setFilterType("F1")}
           >
-            🏁 F1 Calendar (23)
+            Formula 1 (23)
           </button>
           <button
             type="button"
-            className={`gg-filter-pill ${filterType === "COMM" ? "active" : ""}`}
+            className={`gg-segment-btn ${filterType === "COMM" ? "active" : ""}`}
             onClick={() => setFilterType("COMM")}
           >
-            🏭 Commercial (4)
+            Commercial (4)
           </button>
         </div>
       </div>
 
       {loading ? (
-        <Spinner label="Loading verified shipments..." />
+        <Spinner label="Loading shipments..." />
       ) : error ? (
         <ErrorState message={error} onRetry={onRetry} />
       ) : filtered.length === 0 ? (
@@ -133,8 +132,8 @@ export const ShipmentPanel: React.FC<ShipmentPanelProps> = ({
                 <div className="gg-item-header">
                   <div className="gg-item-id-group">
                     <strong className="gg-item-id">{s.shipment_id}</strong>
-                    <Badge variant={isF1 ? "brand" : "cyan"} className="gg-tag-badge">
-                      {isF1 ? `F1 Round ${s.origin_round ?? s.leg_number}` : "Commercial"}
+                    <Badge variant={isSelected ? "white" : "titanium"} className="gg-tag-badge">
+                      {isF1 ? `Round ${s.origin_round ?? s.leg_number}` : "Commercial"}
                     </Badge>
                   </div>
                   <span className="gg-item-window">{s.available_window_days}d window</span>
@@ -150,7 +149,7 @@ export const ShipmentPanel: React.FC<ShipmentPanelProps> = ({
                   <span className="gg-item-cargo" title={s.cargo_description}>
                     {s.cargo_description}
                   </span>
-                  <span className="gg-item-weight">{s.cargo_weight_tonnes} tonnes</span>
+                  <span className="gg-item-weight">{s.cargo_weight_tonnes}t</span>
                 </div>
               </button>
             );

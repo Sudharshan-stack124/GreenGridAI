@@ -6,9 +6,15 @@ export const Spinner: React.FC<{ label?: string; size?: "sm" | "md" | "lg" }> = 
 }) => {
   return (
     <div className={`gg-spinner-container gg-spinner-${size}`} role="status" aria-live="polite">
-      <div className="gg-radar-spinner">
-        <div className="gg-spinner-ring" />
-        <div className="gg-spinner-core" />
+      <div className="gg-ios-spinner">
+        <div className="gg-spinner-blade" />
+        <div className="gg-spinner-blade" />
+        <div className="gg-spinner-blade" />
+        <div className="gg-spinner-blade" />
+        <div className="gg-spinner-blade" />
+        <div className="gg-spinner-blade" />
+        <div className="gg-spinner-blade" />
+        <div className="gg-spinner-blade" />
       </div>
       {label && <span className="gg-spinner-label">{label}</span>}
     </div>

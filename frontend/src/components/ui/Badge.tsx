@@ -1,6 +1,7 @@
 import React from "react";
+import { PlaneIcon, TruckIcon, TrainIcon, ShipIcon } from "./Icons";
 
-export type BadgeVariant = "good" | "bad" | "warn" | "neutral" | "brand" | "cyan";
+export type BadgeVariant = "white" | "frost" | "titanium" | "subtle" | "neutral" | "good" | "bad" | "warn" | "brand" | "cyan";
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -9,7 +10,12 @@ interface BadgeProps {
   icon?: React.ReactNode;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ children, variant = "neutral", className = "", icon }) => {
+export const Badge: React.FC<BadgeProps> = ({
+  children,
+  variant = "frost",
+  className = "",
+  icon,
+}) => {
   return (
     <span className={`gg-badge gg-badge-${variant} ${className}`}>
       {icon && <span className="gg-badge-icon">{icon}</span>}
@@ -20,25 +26,20 @@ export const Badge: React.FC<BadgeProps> = ({ children, variant = "neutral", cla
 
 export const ModeBadge: React.FC<{ mode: string }> = ({ mode }) => {
   const m = mode.toLowerCase();
-  let variant: BadgeVariant = "neutral";
-  let symbol = "📦";
+  let icon = <PlaneIcon size={12} />;
 
   if (m.includes("air")) {
-    variant = "cyan";
-    symbol = "✈";
+    icon = <PlaneIcon size={12} />;
   } else if (m.includes("road")) {
-    variant = "warn";
-    symbol = "🚛";
+    icon = <TruckIcon size={12} />;
   } else if (m.includes("rail")) {
-    variant = "good";
-    symbol = "🚆";
+    icon = <TrainIcon size={12} />;
   } else if (m.includes("sea")) {
-    variant = "brand";
-    symbol = "🚢";
+    icon = <ShipIcon size={12} />;
   }
 
   return (
-    <Badge variant={variant} className="gg-mode-badge" icon={<span style={{ marginRight: 4 }}>{symbol}</span>}>
+    <Badge variant="frost" className="gg-mode-badge" icon={icon}>
       {mode}
     </Badge>
   );

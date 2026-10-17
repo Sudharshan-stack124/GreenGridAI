@@ -2,6 +2,7 @@ import React from "react";
 import type { Shipment } from "../types";
 import { Card } from "./ui/Card";
 import { Badge } from "./ui/Badge";
+import { CompassIcon } from "./ui/Icons";
 import { formatDistance, formatWeight } from "./ui/formatters";
 
 interface ShipmentDetailsProps {
@@ -11,9 +12,9 @@ interface ShipmentDetailsProps {
 export const ShipmentDetails: React.FC<ShipmentDetailsProps> = ({ shipment }) => {
   if (!shipment) {
     return (
-      <Card title="Shipment Specification" subtitle="Active shipment telemetry & contract constraints" icon="📋">
+      <Card title="Corridor Specification" subtitle="Telemetry & contractual delivery constraints" icon={<CompassIcon size={16} />}>
         <div className="gg-empty-state">
-          <p>Please select a shipment from the left panel to inspect its origin, destination, cargo payload, and delivery deadline window.</p>
+          <p>Select a shipment from the left panel to inspect facility coordinates, cargo payload, and delivery deadline window.</p>
         </div>
       </Card>
     );
@@ -23,16 +24,16 @@ export const ShipmentDetails: React.FC<ShipmentDetailsProps> = ({ shipment }) =>
 
   return (
     <Card
-      title={`Shipment ${shipment.shipment_id}: ${shipment.origin_name} to ${shipment.destination_name}`}
-      subtitle={`${isF1 ? "Formula 1 World Championship Logistics" : "Commercial Global Supply Chain"} • Leg Window: ${shipment.available_window_days} Days`}
-      icon="📋"
+      title={`${shipment.shipment_id}: ${shipment.origin_name} to ${shipment.destination_name}`}
+      subtitle={`${isF1 ? "Formula 1 World Championship Calendar" : "Commercial Global Supply Chain"} • Allowed Window: ${shipment.available_window_days} Days`}
+      icon={<CompassIcon size={16} />}
       right={
         <div style={{ display: "flex", gap: "8px" }}>
-          <Badge variant={isF1 ? "brand" : "cyan"}>
+          <Badge variant="titanium">
             {isF1 ? `Round ${shipment.origin_round ?? shipment.leg_number} → Round ${shipment.destination_round ?? ((shipment.leg_number ?? 0) + 1)}` : "Commercial Corridor"}
           </Badge>
-          <Badge variant="good">
-            Window: {shipment.available_window_days} Days
+          <Badge variant="white">
+            {shipment.available_window_days} Days Window
           </Badge>
         </div>
       }
@@ -66,26 +67,26 @@ export const ShipmentDetails: React.FC<ShipmentDetailsProps> = ({ shipment }) =>
 
         {/* Cargo Specification */}
         <div className="gg-spec-block">
-          <div className="gg-spec-label">Cargo Payload & Type</div>
+          <div className="gg-spec-label">Cargo Specification</div>
           <div className="gg-spec-val-primary">{shipment.cargo_description}</div>
-          <div className="gg-spec-val-secondary">Weight: {formatWeight(shipment.cargo_weight_tonnes)}</div>
+          <div className="gg-spec-val-secondary">{formatWeight(shipment.cargo_weight_tonnes)}</div>
           <div className="gg-spec-caption">{shipment.weight_provenance}</div>
         </div>
 
         {/* Timing & Timeline */}
         <div className="gg-spec-block">
-          <div className="gg-spec-label">Schedule & Corridor Distance</div>
+          <div className="gg-spec-label">Corridor Schedule & Distance</div>
           <div className="gg-spec-val-primary">Departure: {shipment.departure_date}</div>
-          <div className="gg-spec-val-secondary">Strict Deadline: {shipment.delivery_deadline}</div>
+          <div className="gg-spec-val-secondary">Delivery Deadline: {shipment.delivery_deadline}</div>
           <div className="gg-spec-caption">
-            Great Circle Arc: {formatDistance(shipment.great_circle_km)} • Allowed Window: {shipment.available_window_days} Days
+            Great Circle Distance: {formatDistance(shipment.great_circle_km)} • Window: {shipment.available_window_days} Days
           </div>
         </div>
       </div>
 
       {shipment.notes && (
         <div className="gg-shipment-note">
-          <span className="gg-note-label">Logistics Directive:</span> {shipment.notes}
+          <span className="gg-note-label">Directive:</span> {shipment.notes}
         </div>
       )}
     </Card>

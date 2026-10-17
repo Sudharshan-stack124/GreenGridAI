@@ -1,5 +1,6 @@
 import React from "react";
 import type { Disruption, Shipment } from "../types";
+import { PackageIcon, ZapIcon, CompassIcon, ShieldAlertIcon } from "./ui/Icons";
 
 interface StatOverviewProps {
   totalShipments: number;
@@ -18,51 +19,51 @@ export const StatOverview: React.FC<StatOverviewProps> = ({
     <div className="gg-stat-overview-grid">
       <div className="gg-stat-card">
         <div className="gg-stat-header">
-          <span className="gg-stat-icon">📦</span>
+          <PackageIcon size={14} className="gg-stat-icon-svg" />
           <span className="gg-stat-title">Monitored Freight</span>
         </div>
-        <div className="gg-stat-value">{totalShipments || "27"}</div>
-        <div className="gg-stat-caption">23 F1 Race Legs • 4 Commercial Corridors</div>
+        <div className="gg-stat-value">{totalShipments || 27}</div>
+        <div className="gg-stat-caption">23 Formula 1 Legs / 4 Commercial Corridors</div>
       </div>
 
       <div className="gg-stat-card">
         <div className="gg-stat-header">
-          <span className="gg-stat-icon">⚡</span>
+          <ZapIcon size={14} className="gg-stat-icon-svg" />
           <span className="gg-stat-title">Disruption Scenarios</span>
         </div>
-        <div className="gg-stat-value">{totalDisruptions || "5"}</div>
-        <div className="gg-stat-caption">Chokepoint, Weather, Port Strike Scenarios</div>
+        <div className="gg-stat-value">{totalDisruptions || 5}</div>
+        <div className="gg-stat-caption">Chokepoint, Strike, and Weather Scenarios</div>
       </div>
 
-      <div className="gg-stat-card highlight-card">
+      <div className="gg-stat-card">
         <div className="gg-stat-header">
-          <span className="gg-stat-icon">📍</span>
-          <span className="gg-stat-title">Selected Corridor</span>
+          <CompassIcon size={14} className="gg-stat-icon-svg" />
+          <span className="gg-stat-title">Active Corridor</span>
         </div>
-        <div className="gg-stat-value truncate" title={selectedShipment ? `${selectedShipment.origin_name} → ${selectedShipment.destination_name}` : "None"}>
+        <div className="gg-stat-value truncate" title={selectedShipment ? `${selectedShipment.origin_name} to ${selectedShipment.destination_name}` : "None"}>
           {selectedShipment
             ? `${selectedShipment.origin_name} → ${selectedShipment.destination_name}`
             : "Select a Shipment"}
         </div>
         <div className="gg-stat-caption">
           {selectedShipment
-            ? `${selectedShipment.shipment_id} • ${selectedShipment.cargo_weight_tonnes}t • ${selectedShipment.available_window_days}d window`
-            : "Awaiting selection from left panel"}
+            ? `${selectedShipment.shipment_id} • ${selectedShipment.cargo_weight_tonnes}t • ${selectedShipment.available_window_days}d Window`
+            : "Awaiting selection"}
         </div>
       </div>
 
-      <div className={`gg-stat-card ${selectedDisruption ? "warning-border" : ""}`}>
+      <div className="gg-stat-card">
         <div className="gg-stat-header">
-          <span className="gg-stat-icon">{selectedDisruption ? "🚨" : "🛡"}</span>
+          <ShieldAlertIcon size={14} className="gg-stat-icon-svg" />
           <span className="gg-stat-title">Operating Scenario</span>
         </div>
         <div className="gg-stat-value truncate" title={selectedDisruption?.title || "Baseline Benchmark"}>
-          {selectedDisruption ? selectedDisruption.title : "Baseline (No Disruption)"}
+          {selectedDisruption ? selectedDisruption.title : "Baseline"}
         </div>
         <div className="gg-stat-caption">
           {selectedDisruption
-            ? `Affects ${selectedDisruption.affected_mode} (+${selectedDisruption.delay_impact_days}d delay)`
-            : "Clear navigation corridors across all modes"}
+            ? `${selectedDisruption.affected_mode} Affected (+${selectedDisruption.delay_impact_days}d delay)`
+            : "Normal operating conditions across all corridors"}
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { Card } from "./ui/Card";
 import { Spinner } from "./ui/Spinner";
 import { ErrorState } from "./ui/ErrorState";
 import { Badge, ModeBadge } from "./ui/Badge";
+import { ZapIcon } from "./ui/Icons";
 
 interface DisruptionPanelProps {
   disruptions: Disruption[] | null;
@@ -25,11 +26,11 @@ export const DisruptionPanel: React.FC<DisruptionPanelProps> = ({
   return (
     <Card
       title="Disruption Scenario"
-      subtitle="Simulate real-world bottlenecks & chokepoint closures"
-      icon="⚡"
+      subtitle="Simulate chokepoint delays & industrial action"
+      icon={<ZapIcon size={16} />}
       right={
-        <Badge variant={selectedId ? "warn" : "good"}>
-          {selectedId ? "Scenario Active" : "Baseline State"}
+        <Badge variant={selectedId ? "white" : "titanium"}>
+          {selectedId ? "Scenario Active" : "Baseline"}
         </Badge>
       }
     >
@@ -49,10 +50,10 @@ export const DisruptionPanel: React.FC<DisruptionPanelProps> = ({
           >
             <div className="gg-item-header">
               <strong className="gg-item-id">Baseline Benchmark</strong>
-              <Badge variant="good">Unimpeded Network</Badge>
+              <Badge variant={selectedId === null ? "white" : "subtle"}>Clear Corridors</Badge>
             </div>
             <p className="gg-disruption-desc">
-              Normal maritime, air, road, and rail operations. No external delays, port strikes, or chokepoint detours applied.
+              Standard operations without simulated geopolitical chokepoint delays, port strikes, or canal draft restrictions.
             </p>
           </button>
 
@@ -73,7 +74,7 @@ export const DisruptionPanel: React.FC<DisruptionPanelProps> = ({
                     <strong className="gg-item-id">{d.disruption_id}</strong>
                     <ModeBadge mode={d.affected_mode} />
                   </div>
-                  <Badge variant="warn">+{d.delay_impact_days}d Delay</Badge>
+                  <Badge variant={isSelected ? "white" : "titanium"}>+{d.delay_impact_days}d Delay</Badge>
                 </div>
 
                 <h4 className="gg-disruption-title">{d.title}</h4>
@@ -83,7 +84,7 @@ export const DisruptionPanel: React.FC<DisruptionPanelProps> = ({
                     Surcharge: <strong>+${d.cost_surcharge_usd.toLocaleString()}</strong>
                   </span>
                   <span className="gg-impact-metric">
-                    CO₂e: <strong>+{d.emissions_increase_pct}%</strong>
+                    CO₂e Delta: <strong>+{d.emissions_increase_pct}%</strong>
                   </span>
                 </div>
 
@@ -92,7 +93,7 @@ export const DisruptionPanel: React.FC<DisruptionPanelProps> = ({
                 </p>
 
                 <div className="gg-disruption-mitigation">
-                  <span className="gg-mitigation-label">Engine Mitigation:</span>
+                  <span className="gg-mitigation-label">Mitigation Corridor:</span>
                   <span className="gg-mitigation-val">{d.mitigation_mode}</span>
                 </div>
               </button>

@@ -2,6 +2,7 @@ import React from "react";
 import type { TransportOption } from "../types";
 import { Card } from "./ui/Card";
 import { Badge } from "./ui/Badge";
+import { BarChartIcon } from "./ui/Icons";
 import { formatCost, formatEmissions, formatTransitTime, isValidMetric } from "./ui/formatters";
 
 interface ComparisonChartsProps {
@@ -23,7 +24,6 @@ export const ComparisonCharts: React.FC<ComparisonChartsProps> = ({
   );
   const maxEmissions = Math.max(...feasibleOptions.map((o) => o.total_emissions_tco2e ?? 0), 1);
 
-  // Find lowest emissions among feasible modes that meet deadline
   const compliantOptions = feasibleOptions.filter((o) => o.meets_deadline === true);
   const greenestCompliant = compliantOptions.reduce<TransportOption | null>((best, curr) => {
     if (!best) return curr;
@@ -33,12 +33,12 @@ export const ComparisonCharts: React.FC<ComparisonChartsProps> = ({
   return (
     <Card
       title="Multimodal Tradeoff Analytics"
-      subtitle="Visual cross-comparison of expenditure, delivery velocity, and carbon footprint"
-      icon="📈"
+      subtitle="Visual cross-comparison of expenditure, velocity, and carbon footprint"
+      icon={<BarChartIcon size={16} />}
       right={
         greenestCompliant && (
-          <Badge variant="good">
-            🌱 Greenest Feasible: {greenestCompliant.mode} ({formatEmissions(greenestCompliant.total_emissions_tco2e)})
+          <Badge variant="white">
+            Lowest Carbon: {greenestCompliant.mode} ({formatEmissions(greenestCompliant.total_emissions_tco2e)})
           </Badge>
         )
       }
@@ -47,8 +47,8 @@ export const ComparisonCharts: React.FC<ComparisonChartsProps> = ({
         {/* Cost Comparison */}
         <div className="gg-chart-card">
           <div className="gg-chart-header">
-            <h4>Total Cost (USD)</h4>
-            <span className="gg-chart-unit">Expenditure Benchmark</span>
+            <h4>Total Expenditure (USD)</h4>
+            <span className="gg-chart-unit">Cost Benchmark</span>
           </div>
           <div className="gg-bar-list">
             {options.map((opt) => {
@@ -66,7 +66,7 @@ export const ComparisonCharts: React.FC<ComparisonChartsProps> = ({
                   <div className="gg-bar-track">
                     {isFeasible && isValidMetric(val) ? (
                       <div
-                        className={`gg-bar-fill ${isWinner ? "fill-brand" : "fill-neutral"}`}
+                        className={`gg-bar-fill ${isWinner ? "fill-white" : "fill-titanium"}`}
                         style={{ width: `${Math.max(pct, 4)}%` }}
                       />
                     ) : (
@@ -104,7 +104,7 @@ export const ComparisonCharts: React.FC<ComparisonChartsProps> = ({
                   <div className="gg-bar-track">
                     {isFeasible && isValidMetric(val) ? (
                       <div
-                        className={`gg-bar-fill ${deadlineMet ? (isWinner ? "fill-brand" : "fill-cyan") : "fill-bad"}`}
+                        className={`gg-bar-fill ${deadlineMet ? (isWinner ? "fill-white" : "fill-titanium") : "fill-bad"}`}
                         style={{ width: `${Math.max(pct, 4)}%` }}
                       />
                     ) : (
@@ -118,7 +118,7 @@ export const ComparisonCharts: React.FC<ComparisonChartsProps> = ({
           {availableWindowDays != null && (
             <div className="gg-deadline-legend">
               <span className="gg-legend-line" />
-              <span>Red bars represent modes that breach the {availableWindowDays}-day delivery SLA.</span>
+              <span>Modes exceeding the {availableWindowDays}-day delivery window violate SLA.</span>
             </div>
           )}
         </div>
@@ -127,7 +127,7 @@ export const ComparisonCharts: React.FC<ComparisonChartsProps> = ({
         <div className="gg-chart-card">
           <div className="gg-chart-header">
             <h4>Carbon Footprint (tCO₂e)</h4>
-            <span className="gg-chart-unit">Greenhouse Gas Emissions</span>
+            <span className="gg-chart-unit">GHG Protocol Metric</span>
           </div>
           <div className="gg-bar-list">
             {options.map((opt) => {
@@ -141,14 +141,14 @@ export const ComparisonCharts: React.FC<ComparisonChartsProps> = ({
                 <div key={`co2-${opt.mode}`} className={`gg-bar-row ${isWinner ? "winner" : ""}`}>
                   <div className="gg-bar-label-group">
                     <span className="gg-bar-mode">
-                      {opt.mode} {isGreenest && "🌱"}
+                      {opt.mode} {isGreenest && "(Lowest)"}
                     </span>
                     <span className="gg-bar-value">{formatEmissions(val)}</span>
                   </div>
                   <div className="gg-bar-track">
                     {isFeasible && isValidMetric(val) ? (
                       <div
-                        className={`gg-bar-fill ${isGreenest ? "fill-good" : isWinner ? "fill-brand" : "fill-neutral"}`}
+                        className={`gg-bar-fill ${isWinner ? "fill-white" : "fill-titanium"}`}
                         style={{ width: `${Math.max(pct, 4)}%` }}
                       />
                     ) : (

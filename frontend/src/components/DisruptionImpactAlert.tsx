@@ -1,6 +1,7 @@
 import React from "react";
 import type { Disruption } from "../types";
 import { ModeBadge } from "./ui/Badge";
+import { ShieldAlertIcon } from "./ui/Icons";
 
 interface DisruptionImpactAlertProps {
   disruption: Disruption;
@@ -15,7 +16,9 @@ export const DisruptionImpactAlert: React.FC<DisruptionImpactAlertProps> = ({
     <div className="gg-disruption-alert-banner" role="alert">
       <div className="gg-alert-header">
         <div className="gg-alert-icon-title">
-          <span className="gg-alert-icon">🚨</span>
+          <div className="gg-alert-icon-wrap">
+            <ShieldAlertIcon size={18} />
+          </div>
           <div>
             <h4 className="gg-alert-title">Active Disruption: {disruption.title}</h4>
             <div className="gg-alert-sub">
@@ -29,7 +32,7 @@ export const DisruptionImpactAlert: React.FC<DisruptionImpactAlertProps> = ({
           onClick={onClear}
           title="Reset to baseline analysis"
         >
-          Reset to Baseline ✕
+          Reset to Baseline ×
         </button>
       </div>
 
@@ -47,7 +50,7 @@ export const DisruptionImpactAlert: React.FC<DisruptionImpactAlertProps> = ({
           <strong>+${disruption.cost_surcharge_usd.toLocaleString()} USD</strong>
         </div>
         <div className="gg-alert-chip">
-          <span>Emissions Increase:</span>
+          <span>Emissions Delta:</span>
           <strong>+{disruption.emissions_increase_pct}%</strong>
         </div>
       </div>

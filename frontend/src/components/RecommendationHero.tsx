@@ -2,6 +2,7 @@ import React from "react";
 import type { Disruption, TransportOption } from "../types";
 import { Card } from "./ui/Card";
 import { Badge, ModeBadge } from "./ui/Badge";
+import { CheckIcon } from "./ui/Icons";
 import { formatCost, formatEmissions, formatTransitTime } from "./ui/formatters";
 
 interface RecommendationHeroProps {
@@ -23,22 +24,22 @@ export const RecommendationHero: React.FC<RecommendationHeroProps> = ({
 
   return (
     <Card
-      title="Recommended Transport Strategy"
-      subtitle="Evaluated by GreenGrid Decision Engine based on deadline SLA, cost, and emissions footprint"
-      icon="🏆"
+      title="Optimal Transport Strategy"
+      subtitle="Evaluated by Decision Engine against SLA deadline, financial expenditure, and carbon footprint"
+      icon={<CheckIcon size={16} />}
       right={
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
           {disruption ? (
             <Badge variant="warn">
-              Active Scenario: {disruption.disruption_id}
+              Scenario: {disruption.disruption_id}
             </Badge>
           ) : (
-            <Badge variant="good">Baseline Analysis</Badge>
+            <Badge variant="subtle">Baseline Analysis</Badge>
           )}
-          <Badge variant={deadlineMet ? "good" : "bad"}>
+          <Badge variant={deadlineMet ? "white" : "bad"}>
             {deadlineMet
-              ? `✓ Deadline Met (${margin != null && margin > 0 ? `+${margin}d margin` : "on time"})`
-              : `✕ Deadline Breached (${margin != null ? `${margin}d` : "late"})`}
+              ? `Deadline Met (${margin != null && margin > 0 ? `+${margin}d buffer` : "on-time"})`
+              : `Deadline Breached (${margin != null ? `${margin}d` : "late"})`}
           </Badge>
         </div>
       }
@@ -47,13 +48,13 @@ export const RecommendationHero: React.FC<RecommendationHeroProps> = ({
       <div className="gg-hero-grid">
         {/* Recommended Mode Box */}
         <div className="gg-hero-mode-box">
-          <span className="gg-hero-eyebrow">PRIMARY SELECTION</span>
+          <span className="gg-hero-eyebrow">Primary Recommendation</span>
           <div className="gg-hero-mode-title">
             <ModeBadge mode={topOption.mode} />
             <span className="gg-mode-name">{topOption.mode} Freight</span>
           </div>
           <div className="gg-hero-status-row">
-            <Badge variant={isFeasible ? "good" : "bad"}>
+            <Badge variant={isFeasible ? "white" : "bad"}>
               {topOption.feasibility_status}
             </Badge>
             {topOption.composite_score != null && (
@@ -67,11 +68,11 @@ export const RecommendationHero: React.FC<RecommendationHeroProps> = ({
 
         {/* Core Metrics Grid */}
         <div className="gg-hero-metric-tile">
-          <span className="gg-metric-label">Estimated Total Cost</span>
+          <span className="gg-metric-label">Estimated Expenditure</span>
           <div className="gg-metric-value">{formatCost(topOption.total_cost_usd)}</div>
           <div className="gg-metric-breakdown">
             {topOption.fixed_cost_usd != null && topOption.distance_cost_usd != null ? (
-              <>Fixed: ${topOption.fixed_cost_usd.toLocaleString()} • Distance: ${topOption.distance_cost_usd.toLocaleString()}</>
+              <>Fixed: ${topOption.fixed_cost_usd.toLocaleString()} • Variable: ${topOption.distance_cost_usd.toLocaleString()}</>
             ) : (
               topOption.cost_status || "Standard Tariff Rate"
             )}
@@ -83,21 +84,21 @@ export const RecommendationHero: React.FC<RecommendationHeroProps> = ({
           <div className="gg-metric-value">{formatTransitTime(topOption.transit_time_days)}</div>
           <div className="gg-metric-breakdown">
             {availableWindowDays != null ? (
-              <>Allowed Window: <strong>{availableWindowDays} days</strong> ({topOption.estimated_arrival_date !== "N/A" ? `ETA ${topOption.estimated_arrival_date}` : "On-Time"})</>
+              <>Window: <strong>{availableWindowDays} days</strong> ({topOption.estimated_arrival_date !== "N/A" ? `ETA ${topOption.estimated_arrival_date}` : "On-Time"})</>
             ) : (
-              "Within required transit window"
+              "Within allowed corridor window"
             )}
           </div>
         </div>
 
-        <div className="gg-hero-metric-tile eco-tile">
-          <span className="gg-metric-label">CO₂e Carbon Footprint</span>
-          <div className="gg-metric-value eco-value">{formatEmissions(topOption.total_emissions_tco2e)}</div>
+        <div className="gg-hero-metric-tile">
+          <span className="gg-metric-label">Carbon Footprint</span>
+          <div className="gg-metric-value">{formatEmissions(topOption.total_emissions_tco2e)}</div>
           <div className="gg-metric-breakdown">
             {topOption.emission_factor_kg_per_tkm != null ? (
-              <>Factor: {topOption.emission_factor_kg_per_tkm} kg/tonne-km (DEFRA)</>
+              <>{topOption.emission_factor_kg_per_tkm} kg/t-km (DEFRA)</>
             ) : (
-              "Verified GHG Protocol Metric"
+              "GLEC / ISO 14083 Framework"
             )}
           </div>
         </div>

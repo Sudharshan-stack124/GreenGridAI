@@ -2,6 +2,7 @@ import React from "react";
 import type { TransportOption } from "../types";
 import { Card } from "./ui/Card";
 import { Badge, ModeBadge } from "./ui/Badge";
+import { LayersIcon } from "./ui/Icons";
 import { formatCost, formatEmissions, formatTransitTime } from "./ui/formatters";
 
 interface RankedAlternativesTableProps {
@@ -12,23 +13,23 @@ export const RankedAlternativesTable: React.FC<RankedAlternativesTableProps> = (
   return (
     <Card
       title="Ranked Transport Alternatives"
-      subtitle="Complete multimodal evaluation across all available carrier networks"
-      icon="📊"
-      right={<Badge variant="neutral">{options.length} Candidate Modes</Badge>}
+      subtitle="Complete multimodal evaluation across candidate carrier networks"
+      icon={<LayersIcon size={16} />}
+      right={<Badge variant="titanium">{options.length} Modes Evaluated</Badge>}
     >
       <div className="gg-table-container">
         <table className="gg-table">
           <thead>
             <tr>
-              <th scope="col" style={{ width: "60px" }}>Rank</th>
+              <th scope="col" style={{ width: "50px" }}>Rank</th>
               <th scope="col" style={{ width: "120px" }}>Mode</th>
-              <th scope="col" style={{ width: "110px" }}>Feasibility</th>
+              <th scope="col" style={{ width: "110px" }}>Status</th>
               <th scope="col">Total Cost</th>
               <th scope="col">Transit Time</th>
               <th scope="col">CO₂e Footprint</th>
               <th scope="col">Deadline Status</th>
               <th scope="col">Score</th>
-              <th scope="col">Feasibility Reason & Route Details</th>
+              <th scope="col">Feasibility & Operational Note</th>
             </tr>
           </thead>
           <tbody>
@@ -41,14 +42,14 @@ export const RankedAlternativesTable: React.FC<RankedAlternativesTableProps> = (
                 <tr key={opt.option_id || opt.mode} className={isWinner ? "gg-table-row-winner" : ""}>
                   <td>
                     <span className={`gg-rank-badge ${isWinner ? "winner" : ""}`}>
-                      {isWinner ? "★ 1" : `${index + 1}`}
+                      {index + 1}
                     </span>
                   </td>
                   <td>
                     <ModeBadge mode={opt.mode} />
                   </td>
                   <td>
-                    <Badge variant={isFeasible ? "good" : "bad"}>
+                    <Badge variant={isFeasible ? (isWinner ? "white" : "titanium") : "subtle"}>
                       {opt.feasibility_status}
                     </Badge>
                   </td>
@@ -58,7 +59,7 @@ export const RankedAlternativesTable: React.FC<RankedAlternativesTableProps> = (
                   <td className="gg-tabular-num">
                     {formatTransitTime(opt.transit_time_days)}
                   </td>
-                  <td className="gg-tabular-num eco-cell">
+                  <td className="gg-tabular-num">
                     {formatEmissions(opt.total_emissions_tco2e)}
                   </td>
                   <td>
@@ -66,11 +67,11 @@ export const RankedAlternativesTable: React.FC<RankedAlternativesTableProps> = (
                       <span className="gg-text-muted">—</span>
                     ) : deadlineMet === true ? (
                       <Badge variant="good">
-                        ✓ Met {opt.deadline_margin_days != null ? `(+${opt.deadline_margin_days}d)` : ""}
+                        Met {opt.deadline_margin_days != null ? `(+${opt.deadline_margin_days}d)` : ""}
                       </Badge>
                     ) : (
                       <Badge variant="bad">
-                        ✕ Breached {opt.deadline_margin_days != null ? `(${opt.deadline_margin_days}d)` : ""}
+                        Breached {opt.deadline_margin_days != null ? `(${opt.deadline_margin_days}d)` : ""}
                       </Badge>
                     )}
                   </td>

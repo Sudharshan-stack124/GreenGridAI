@@ -18,62 +18,57 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="gg-header">
       <div className="gg-header-container">
         <div className="gg-brand-section">
-          <div className="gg-logo-mark">
-            <span className="gg-logo-diamond">◆</span>
-            <span className="gg-logo-pulse" />
+          <div className="gg-brand-logo">
+            <span className="gg-logo-inner" />
           </div>
           <div className="gg-brand-titles">
             <div className="gg-brand-name-row">
               <span className="gg-brand-title">GreenGrid</span>
-              <span className="gg-brand-sub">AI</span>
-              <Badge variant="brand" className="gg-event-badge">
+              <span className="gg-brand-sub">Platform</span>
+              <Badge variant="frost" className="gg-event-badge">
                 IBM Z Datathon 2026
               </Badge>
             </div>
             <p className="gg-brand-tagline">
-              Autonomous Carbon-Conscious Logistics Decision Engine & Disruption Rerouting
+              Autonomous Logistics Decision Support & Disruption Rerouting
             </p>
           </div>
         </div>
 
         <div className="gg-header-actions">
-          <nav className="gg-header-nav" aria-label="Main Navigation">
+          <nav className="gg-header-segmented-nav" aria-label="Main Navigation">
             <button
               type="button"
-              className={`gg-nav-link ${activeTab === "dashboard" ? "active" : ""}`}
+              className={`gg-nav-segment ${activeTab === "dashboard" ? "active" : ""}`}
               onClick={() => onSelectTab("dashboard")}
             >
-              Control Dashboard
+              Dashboard
             </button>
             <button
               type="button"
-              className={`gg-nav-link ${activeTab === "scenarios" ? "active" : ""}`}
+              className={`gg-nav-segment ${activeTab === "scenarios" ? "active" : ""}`}
               onClick={() => onSelectTab("scenarios")}
             >
-              Disruption Matrix (8 Scenarios)
+              Disruption Matrix
             </button>
             <button
               type="button"
-              className={`gg-nav-link ${activeTab === "dataset" ? "active" : ""}`}
+              className={`gg-nav-segment ${activeTab === "dataset" ? "active" : ""}`}
               onClick={() => onSelectTab("dataset")}
             >
-              Dataset Explorer (v2.1.1)
+              Dataset v2.1.1
             </button>
           </nav>
 
-          <div className="gg-system-mode-pill">
-            <span className={`gg-status-indicator ${useMocks ? "mock" : "live"}`} />
-            <div className="gg-mode-details">
-              <span className="gg-mode-label">{useMocks ? "Mock Data Mode" : "Live API Connected"}</span>
-              <small className="gg-mode-desc">{useMocks ? "Frozen v2.1.1 Benchmark" : "Backend Services"}</small>
-            </div>
+          <div className="gg-system-mode-toggle">
             <button
               type="button"
-              className="gg-mode-switch-btn"
+              className={`gg-mode-pill ${useMocks ? "mock" : "live"}`}
               onClick={() => onToggleMocks(!useMocks)}
-              title="Toggle between verified benchmark dataset and live backend API services"
+              title="Click to toggle between Mock Benchmark Mode and Live Microservices"
             >
-              Switch to {useMocks ? "Live API" : "Mock"}
+              <span className="gg-mode-dot" />
+              <span className="gg-mode-text">{useMocks ? "Mock Benchmark" : "Live Backend"}</span>
             </button>
           </div>
         </div>

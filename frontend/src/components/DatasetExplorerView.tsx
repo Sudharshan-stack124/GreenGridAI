@@ -3,6 +3,7 @@ import { SHP_DATASET } from "../data/shipmentsData";
 import { DIS_DATASET } from "../data/disruptionsData";
 import { Card } from "./ui/Card";
 import { Badge, ModeBadge } from "./ui/Badge";
+import { PackageIcon, SearchIcon } from "./ui/Icons";
 import { formatCost, formatDistance, formatWeight } from "./ui/formatters";
 
 export const DatasetExplorerView: React.FC = () => {
@@ -25,19 +26,19 @@ export const DatasetExplorerView: React.FC = () => {
       <Card
         title="Frozen Benchmark Dataset Explorer (Version 2.1.1)"
         subtitle="Audited and validated ground truth dataset for IBM Z Datathon 2026"
-        icon="🗄"
+        icon={<PackageIcon size={16} />}
         right={
-          <div className="gg-tab-pills">
+          <div className="gg-segmented-control">
             <button
               type="button"
-              className={`gg-filter-pill ${activeSubTab === "shipments" ? "active" : ""}`}
+              className={`gg-segment-btn ${activeSubTab === "shipments" ? "active" : ""}`}
               onClick={() => setActiveSubTab("shipments")}
             >
               Shipments (27)
             </button>
             <button
               type="button"
-              className={`gg-filter-pill ${activeSubTab === "disruptions" ? "active" : ""}`}
+              className={`gg-segment-btn ${activeSubTab === "disruptions" ? "active" : ""}`}
               onClick={() => setActiveSubTab("disruptions")}
             >
               Disruptions (5)
@@ -46,11 +47,11 @@ export const DatasetExplorerView: React.FC = () => {
         }
       >
         <div className="gg-dataset-meta-bar">
-          <div className="gg-search-wrap" style={{ maxWidth: "400px" }}>
-            <span className="gg-search-icon">🔍</span>
+          <div className="gg-search-wrap" style={{ maxWidth: "380px" }}>
+            <SearchIcon size={14} className="gg-search-icon" />
             <input
               type="search"
-              className="gg-input"
+              className="gg-input gg-search-input"
               placeholder="Search dataset records..."
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
@@ -58,7 +59,7 @@ export const DatasetExplorerView: React.FC = () => {
           </div>
           <div className="gg-dataset-metrics-summary">
             <span>Verified Records: <strong>{activeSubTab === "shipments" ? filteredShipments.length : DIS_DATASET.length}</strong></span>
-            <span>Checksum: <strong>DEFRA 2024 / ISO 14083 Compliant</strong></span>
+            <span>Framework: <strong>ISO 14083 / DEFRA</strong></span>
           </div>
         </div>
 
@@ -82,7 +83,7 @@ export const DatasetExplorerView: React.FC = () => {
                   <tr key={s.shipment_id}>
                     <td><strong>{s.shipment_id}</strong></td>
                     <td>
-                      <Badge variant={s.use_case_type === "F1_Demonstration" ? "brand" : "cyan"}>
+                      <Badge variant="titanium">
                         {s.use_case_type === "F1_Demonstration" ? `F1 Round ${s.origin_round ?? s.leg_number}` : "Commercial"}
                       </Badge>
                     </td>
@@ -91,7 +92,7 @@ export const DatasetExplorerView: React.FC = () => {
                     <td className="gg-tabular-num">{formatDistance(s.great_circle_km)}</td>
                     <td className="gg-tabular-num">{formatWeight(s.cargo_weight_tonnes)}</td>
                     <td className="gg-tabular-num">
-                      <Badge variant="good">{s.available_window_days} Days</Badge>
+                      <Badge variant="white">{s.available_window_days} Days</Badge>
                     </td>
                     <td className="gg-reason-text" title={s.cargo_description}>{s.cargo_description}</td>
                   </tr>
@@ -120,13 +121,13 @@ export const DatasetExplorerView: React.FC = () => {
                   <tr key={d.disruption_id}>
                     <td><strong>{d.disruption_id}</strong></td>
                     <td><strong>{d.title}</strong></td>
-                    <td><Badge variant="neutral">{d.type}</Badge></td>
+                    <td><Badge variant="titanium">{d.type}</Badge></td>
                     <td><ModeBadge mode={d.affected_mode} /></td>
-                    <td className="gg-tabular-num"><Badge variant="warn">+{d.delay_impact_days} Days</Badge></td>
+                    <td className="gg-tabular-num"><Badge variant="white">+{d.delay_impact_days} Days</Badge></td>
                     <td className="gg-tabular-num">{formatCost(d.cost_surcharge_usd)}</td>
                     <td className="gg-tabular-num">+{d.emissions_increase_pct}%</td>
                     <td>{d.geographic_corridor}</td>
-                    <td><Badge variant="good">{d.mitigation_mode}</Badge></td>
+                    <td><Badge variant="subtle">{d.mitigation_mode}</Badge></td>
                   </tr>
                 ))}
               </tbody>

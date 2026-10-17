@@ -21,6 +21,7 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <section className={`gg-card ${className}`}>
+      <div className="gg-card-specular-edge" />
       {(title || right) && (
         <header className={`gg-card-header ${headerBorder ? "with-border" : ""}`}>
           <div className="gg-card-title-group">

@@ -17,6 +17,7 @@ import { DatasetExplorerView } from "./components/DatasetExplorerView";
 import { Card } from "./components/ui/Card";
 import { Spinner } from "./components/ui/Spinner";
 import { ErrorState } from "./components/ui/ErrorState";
+import { CompassIcon, ShieldAlertIcon, CheckIcon } from "./components/ui/Icons";
 
 export default function App() {
   const [useMocks, setUseMocks] = useState(config.useMocks);
@@ -187,14 +188,14 @@ export default function App() {
                 >
                   {isAnalysing ? (
                     <span className="gg-cta-loading">
-                      <span className="gg-btn-spinner" /> Evaluating Multimodal Network...
+                      <span className="gg-btn-spinner" /> Evaluating Corridor...
                     </span>
                   ) : (
-                    <span>⚡ Analyse Freight Corridor</span>
+                    <span>Analyse Freight Corridor</span>
                   )}
                 </button>
                 <div className="gg-cta-caption">
-                  Cross-evaluates Air, Road, Rail, and Sea against SLA deadline, financial expenditure, and CO₂e emissions.
+                  Evaluates Air, Road, Rail, and Sea against SLA deadlines, expenditure, and carbon footprint.
                 </div>
               </div>
             </aside>
@@ -215,13 +216,13 @@ export default function App() {
               )}
 
               {isAnalysing ? (
-                <Card title="Decision Engine Multimodal Analysis" icon="⚙">
+                <Card title="Decision Engine Multimodal Analysis" icon={<CompassIcon size={16} />}>
                   <div className="gg-analysing-state">
                     <Spinner label="Evaluating routes against circuity, DEFRA emission factors, and delivery SLA..." size="lg" />
                   </div>
                 </Card>
               ) : analysisError ? (
-                <Card title="Analysis Execution Error" icon="⚠">
+                <Card title="Analysis Execution Error" icon={<ShieldAlertIcon size={16} />}>
                   <ErrorState
                     title="Decision Engine Error"
                     message={analysisError}
@@ -231,14 +232,16 @@ export default function App() {
               ) : !recommendation ? (
                 <Card
                   title="Decision Engine Ready"
-                  subtitle="Configure shipment route & disruption scenario, then click Analyse"
-                  icon="🎯"
+                  subtitle="Select shipment route and disruption scenario, then evaluate"
+                  icon={<CheckIcon size={16} />}
                 >
                   <div className="gg-onboarding-box">
-                    <div className="gg-onboarding-graphic">🚚 💨</div>
-                    <h3>Ready for Multimodal Evaluation</h3>
+                    <div className="gg-onboarding-graphic">
+                      <CompassIcon size={36} />
+                    </div>
+                    <h3>Multimodal Evaluation Ready</h3>
                     <p>
-                      Select any of the 27 monitored shipments from the left panel and optionally inject an active disruption scenario (e.g., Red Sea Maritime Closure or Dover Channel Port Strike).
+                      Select any of the 27 monitored shipments from the catalog and optionally inject an active disruption scenario to evaluate alternative carrier networks.
                     </p>
                     <button
                       type="button"
@@ -246,7 +249,7 @@ export default function App() {
                       onClick={() => handleAnalyse()}
                       disabled={!selectedShipmentId}
                     >
-                      Run Quick Analysis for {selectedShipmentId || "Current Shipment"} →
+                      Analyse {selectedShipmentId || "Selected Corridor"}
                     </button>
                   </div>
                 </Card>
