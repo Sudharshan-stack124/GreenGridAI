@@ -3099,3 +3099,26 @@ h1, h2, h3, h4, .gg-brand-title, .gg-stat-value, .gg-metric-value, .gg-hero-titl
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+
+/* Admin Console Switcher Link in User Header */
+.gg-admin-switch-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--liquid-glass-subtle);
+  border: 1px solid var(--liquid-border-medium);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 800;
+  transition: var(--transition-fast);
+}
+
+.gg-admin-switch-btn:hover {
+  color: var(--text-primary);
+  background: var(--liquid-glass-hover);
+  border-color: var(--liquid-border-bright);
+}
