@@ -1,0 +1,52 @@
+table,column,type,unit,provenance,description,validation
+shipments,shipment_id,TEXT,ID,Generated Key,"Unique shipment identifier (e.g., SHP-01 or COMM-01)","Unique, non-null"
+shipments,use_case_type,TEXT,Category,Domain Classification,F1_Demonstration or Commercial_General,"In [F1_Demonstration, Commercial_General]"
+shipments,leg_number,INTEGER,Sequence,F1 2027 Calendar,Chronological race-to-race leg sequence (1 to 23 for F1; null for Commercial),Optional or 1..23
+shipments,origin_name,TEXT,City,Origin Definition,Origin city or locality,Non-null
+shipments,origin_circuit,TEXT,Name,F1 Calendar,Formula 1 Grand Prix circuit name (or N/A for commercial),Text
+shipments,origin_facility,TEXT,Facility Name,Operational Facility,"Logistics hub, cargo terminal, port, or paddock facility",Non-null
+shipments,origin_lat,FLOAT,Degrees,Verified Coordinates,Origin latitude coordinate,-90.0 <= lat <= 90.0
+shipments,origin_lon,FLOAT,Degrees,Verified Coordinates,Origin longitude coordinate,-180.0 <= lon <= 180.0
+shipments,origin_region,TEXT,Region,Geographic Region,Geographical region / continent,Non-null
+shipments,destination_name,TEXT,City,Destination Definition,Destination city or locality,Non-null
+shipments,destination_circuit,TEXT,Name,F1 Calendar,Formula 1 Grand Prix circuit name (or N/A for commercial),Text
+shipments,destination_facility,TEXT,Facility Name,Operational Facility,"Logistics hub, cargo terminal, port, or paddock facility",Non-null
+shipments,destination_lat,FLOAT,Degrees,Verified Coordinates,Destination latitude coordinate,-90.0 <= lat <= 90.0
+shipments,destination_lon,FLOAT,Degrees,Verified Coordinates,Destination longitude coordinate,-180.0 <= lon <= 180.0
+shipments,destination_region,TEXT,Region,Geographic Region,Geographical region / continent,Non-null
+shipments,great_circle_km,INTEGER,Kilometers,Calculated (Haversine),"Great-circle distance calculated with Earth radius 6,371 km",> 0
+shipments,cargo_weight_tonnes,FLOAT,Metric Tonnes,Declared / Benchmark,"Cargo shipment weight in metric tonnes (1,200 t for F1; variable for commercial)",> 0.0
+shipments,cargo_description,TEXT,Description,Manifest,Description of freight goods and commodities,Non-null
+shipments,weight_provenance,TEXT,Text,Documentation,Citation or benchmark classification of cargo weight,Non-null
+shipments,departure_date,DATE,YYYY-MM-DD,Schedule,Freight departure timestamp (ISO date),ISO date <= delivery_deadline
+shipments,delivery_deadline,DATE,YYYY-MM-DD,SLA / Calendar,Delivery deadline timestamp (ISO date),ISO date >= departure_date
+shipments,available_window_days,FLOAT,Days,Calculated,Difference in days between departure and deadline,> 0.0
+transport_options,option_id,TEXT,ID,Generated Key,Unique transport candidate identifier (e.g. OPT-COMM-01-RAIL),"Unique, non-null"
+transport_options,shipment_id,TEXT,Foreign Key,Reference,Foreign key to shipments.shipment_id,Must exist in shipments
+transport_options,use_case_type,TEXT,Category,Classification,Inherited from shipment use case,"In [F1_Demonstration, Commercial_General]"
+transport_options,mode,TEXT,Category,Transport Mode,"Transport mode (Air, Road, Rail, Sea)","In [Air, Road, Rail, Sea]"
+transport_options,feasibility_status,TEXT,Category,Routing Engine,"Feasible, Conditionally Feasible, or Infeasible based on geography","In [Feasible, Conditionally Feasible, Infeasible]"
+transport_options,feasibility_reason,TEXT,Text,Operational Logic,Physical feasibility justification or barrier explanation,Non-null
+transport_options,route_distance_km,INTEGER,Kilometers,Calculated,Operational route distance incorporating modal circuity detour,>= 0
+transport_options,circuity_multiplier,FLOAT,Ratio,Documented Assumption,Ratio of realistic operational route distance to great-circle distance,>= 0.0
+transport_options,transit_time_days,FLOAT,Days,Calculated,Total expected transit duration including terminal handling buffers,>= 0.0
+transport_options,estimated_arrival_date,DATE,YYYY-MM-DD,Calculated,Expected arrival date at destination facility,departure_date + transit_time_days
+transport_options,meets_deadline,BOOLEAN,Boolean,Calculated Constraint,True if transit_time_days <= available_window_days,Boolean
+transport_options,deadline_margin_days,FLOAT,Days,Calculated,Buffer safety margin (available_window_days - transit_time_days),Float
+transport_options,fixed_cost_usd,INTEGER,USD,Documented Formula,"Terminal handling, ULD packing, stevedoring, and gate fees",>= 0
+transport_options,distance_cost_usd,INTEGER,USD,Documented Formula,Distance and ton-kilometer transportation fee,>= 0
+transport_options,total_cost_usd,INTEGER,USD,Calculated (Sum),Total estimated freight cost (fixed + distance),>= 0
+transport_options,emission_factor_kg_per_tkm,FLOAT,kg CO2e/t-km,UK Government DEFRA/DESNZ,Official freight GHG conversion factor,> 0
+transport_options,total_emissions_tco2e,FLOAT,t CO2e,Calculated Formula,Total greenhouse gas emissions in metric tonnes CO2 equivalent,>= 0
+transport_options,composite_score,FLOAT,Score (0-100),Multi-Criteria Algorithm,"Weighted decision score (35% Cost, 40% Carbon, 25% Time, strictly applied to eligible pool)",0.0 <= score <= 100.0
+transport_options,is_recommended,BOOLEAN,Boolean,Optimization Decision,True for optimal alternative satisfying deadline and multi-objective criteria,At most one True per shipment
+disruptions,disruption_id,TEXT,ID,Simulated Scenario,Unique disruption scenario identifier (DIS-01 to DIS-05),"Unique, non-null"
+disruptions,delay_impact_days,FLOAT,Days,Simulated Value,Estimated transit delay imposed on affected routes,>= 0.0
+disruptions,cost_surcharge_usd,INTEGER,USD,Simulated Value,Congestion/rerouting fee or fuel surcharge in USD,>= 0
+disruptions,emissions_increase_pct,FLOAT,Percentage,Simulated Value,Percentage increase in GHG emissions due to detours or holding burn,>= 0.0
+scenario_tests,test_case_id,TEXT,ID,Test Suite,Unique scenario evaluation test case identifier (TC-01 to TC-08),"Unique, non-null"
+scenario_tests,domain,TEXT,Category,Classification,F1_Demonstration or Commercial_General,"In [F1_Demonstration, Commercial_General]"
+scenario_tests,shipment_id,TEXT,Foreign Key,Reference,Target shipment evaluated,Must exist in shipments
+scenario_tests,tested_mode,TEXT,Category,Transport Mode,Candidate mode directly tested under baseline/disruption,"In [Air, Road, Rail, Sea]"
+scenario_tests,recommended_action,TEXT,Text,Decision Support,Actionable decision recommendation generated by GreenGrid,Non-null
+scenario_tests,explanation,TEXT,Text,Explainable AI (XAI),Plain-language trade-off explanation for logistics managers,Non-null
